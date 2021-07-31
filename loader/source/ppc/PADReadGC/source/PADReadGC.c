@@ -1441,7 +1441,7 @@ u32 PADRead(u32 calledByGame)
 				if(BTPad[chan].button & BT_BUTTON_Y)
 					button |= PAD_BUTTON_Y;
 			}
-			if(BTPad[chan].button & BT_BUTTON_START)
+			if(BTPad[chan].button & BT_BUTTON_START || BTPad[chan].button & BT_BUTTON_HOME)
 				button |= PAD_BUTTON_START;
 
 			if(BTPad[chan].button & BT_DPAD_LEFT)
