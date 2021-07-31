@@ -865,9 +865,10 @@ int main(int argc, char **argv)
 	{
 		// Autobooting.
 		gprintf("Autobooting:\"%s\"\r\n", ncfg->GamePath );
-		PrintInfo();
-		GRRLIB_Render();
-		ClearScreen();
+		//this aparently can break some vc autoboot issues
+                //PrintInfo();
+		//GRRLIB_Render();
+		//ClearScreen();
 	}
 
 //Init DI and set correct ID if needed
@@ -1070,7 +1071,11 @@ int main(int argc, char **argv)
 				break;
 		}
 	}
-
+if( ncfg->GameID == 0x47464f45 )	// The Fairly OddParents: Shadow Showdown
+	{
+                //Fix dummy language files that give error no string with other than english console language being used
+		ncfg->Language = NIN_LAN_ENGLISH;
+	}
 	if(ncfg->Config & NIN_CFG_MEMCARDEMU)
 	{
 		// Memory card emulation is enabled.
