@@ -8,6 +8,10 @@ Changes:
     * **The Legend of Zelda: Four Swords Adventures**
 	    * D-Pad => Left Stick
 		* Select => D-Pad Down
+		
+To build on Windows, you might need to set the "windows" variable so the build process can find zip.exe:
+
+    $ windows=1 make
 
 .dol files (if any) are in the Releases section on GitHub.
 
