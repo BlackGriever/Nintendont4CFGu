@@ -858,9 +858,9 @@ u32 PADRead(u32 calledByGame)
 		}
 		else if(BTPad[chan].used & C_CCP)	//digital triggers
 		{
-			if(BTPad[chan].button & BT_TRIGGER_ZL)
+			if(BTPad[chan].button & BT_TRIGGER_L)
 			{
-				if(BTPad[chan].button & BT_TRIGGER_L)
+				if(BTPad[chan].button & BT_TRIGGER_ZL)
 					Pad[chan].triggerLeft = 0x7F;
 				else
 				{
@@ -871,9 +871,9 @@ u32 PADRead(u32 calledByGame)
 			else
 				Pad[chan].triggerLeft = 0;
 
-			if(BTPad[chan].button & BT_TRIGGER_ZR)
+			if(BTPad[chan].button & BT_TRIGGER_R)
 			{
-				if(BTPad[chan].button & BT_TRIGGER_L)
+				if(BTPad[chan].button & BT_TRIGGER_ZL)
 					Pad[chan].triggerRight = 0x7F;
 				else
 				{
@@ -884,7 +884,7 @@ u32 PADRead(u32 calledByGame)
 			else
 				Pad[chan].triggerRight = 0;
 
-			if(BTPad[chan].button & BT_TRIGGER_R)
+			if(BTPad[chan].button & BT_TRIGGER_ZR)
 				button |= PAD_TRIGGER_Z;
 		}
 
