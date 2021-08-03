@@ -139,6 +139,9 @@ u32 PADRead(u32 calledByGame)
 		//Start out mapping buttons first
 		u16 button = 0;
 		u16 drcbutton = (i2cdata[2]<<8) | (i2cdata[3]);
+		//swap abxy when L+minus is pressed
+		if((!((PrevDRCButton & WIIDRC_EXTRA_BUTTON_L3) && (PrevDRCButton & WIIDRC_BUTTON_MINUS))) && ((drcbutton & WIIDRC_EXTRA_BUTTON_R3) && (drcbutton & WIIDRC_BUTTON_MINUS)))
+			PrevDRCButton ^= DRC_SWAP;
 		PrevDRCButton = (PrevDRCButton & DRC_SWAP) | drcbutton;
 		if(PrevDRCButton & DRC_SWAP)
 		{	/* turn buttons quarter clockwise */
@@ -158,35 +161,31 @@ u32 PADRead(u32 calledByGame)
 		if(drcbutton & WIIDRC_BUTTON_RIGHT) button |= PAD_BUTTON_RIGHT;
 		if(drcbutton & WIIDRC_BUTTON_UP) button |= PAD_BUTTON_UP;
 		if(drcbutton & WIIDRC_BUTTON_DOWN) button |= PAD_BUTTON_DOWN;
-		//also sets left analog trigger
-		if(drcbutton & WIIDRC_BUTTON_ZL)
+		if(drcbutton & WIIDRC_BUTTON_L)
 		{
-			//Check half-press by holding L
-			if(drcbutton & WIIDRC_BUTTON_L)
-				Pad[WiiUGamepadSlot].triggerLeft = 0x7F;
-			else
-			{
-				button |= PAD_TRIGGER_L;
-				Pad[WiiUGamepadSlot].triggerLeft = 0xFF;
-			}
+			button |= PAD_TRIGGER_L;
+			Pad[WiiUGamepadSlot].triggerLeft = 0x7F;
+		}
+		else if(drcbutton & WIIDRC_BUTTON_ZL)
+		{
+			button |= PAD_TRIGGER_L;
+			Pad[WiiUGamepadSlot].triggerLeft = 0xFF;
 		}
 		else
 			Pad[WiiUGamepadSlot].triggerLeft = 0;
-		//also sets right analog trigger
-		if(drcbutton & WIIDRC_BUTTON_ZR)
+		if(drcbutton & WIIDRC_BUTTON_R)
 		{
-			//Check half-press by holding L
-			if(drcbutton & WIIDRC_BUTTON_L)
-				Pad[WiiUGamepadSlot].triggerRight = 0x7F;
-			else
-			{
-				button |= PAD_TRIGGER_R;
-				Pad[WiiUGamepadSlot].triggerRight = 0xFF;
-			}
+			button |= PAD_TRIGGER_R;
+			Pad[WiiUGamepadSlot].triggerRight = 0x7F;
+		}
+		else if(drcbutton & WIIDRC_BUTTON_ZR)
+		{
+			button |= PAD_TRIGGER_R;
+			Pad[WiiUGamepadSlot].triggerRight = 0xFF;
 		}
 		else
 			Pad[WiiUGamepadSlot].triggerRight = 0;
-		if(drcbutton & WIIDRC_BUTTON_R) button |= PAD_TRIGGER_Z;
+		if(drcbutton & WIIDRC_BUTTON_MINUS) button |= PAD_TRIGGER_Z;
 		if(drcbutton & WIIDRC_BUTTON_PLUS) button |= PAD_BUTTON_START;
 
 		//write in mapped out buttons
