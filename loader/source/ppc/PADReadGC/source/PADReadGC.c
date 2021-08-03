@@ -852,7 +852,7 @@ u32 PADRead(u32 calledByGame)
 			if(BTPad[chan].button & BT_TRIGGER_ZR)
 			{
 				button |= PAD_TRIGGER_R;
-				Pad[chan].triggerLeft = 0x7F;
+				Pad[chan].triggerRight = 0x7F;
 			}
 
 			if(BTPad[chan].button & BT_BUTTON_SELECT)
@@ -884,7 +884,7 @@ u32 PADRead(u32 calledByGame)
 				Pad[chan].triggerRight = 0x7F;
 			}
 			else
-				Pad[chan].triggerLeft = 0;
+				Pad[chan].triggerRight = 0;
 
 			if(BTPad[chan].button & BT_BUTTON_SELECT)
 				button |= PAD_TRIGGER_Z;
