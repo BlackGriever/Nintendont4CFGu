@@ -863,42 +863,34 @@ u32 PADRead(u32 calledByGame)
 		{
 			if(BTPad[chan].button & BT_TRIGGER_ZL)
 			{
-				button |= PAD_TRIGGER_ZL;
 				Pad[chan].triggerLeft = 12;
 			}
 			else if(BTPad[chan].button & BT_TRIGGER_ZR)
 			{
-				button |= PAD_TRIGGER_L;
 				Pad[chan].triggerLeft = 25;
 			}
 			else if(BTPad[chan].button & BT_TRIGGER_L)
 			{
-				button |= PAD_TRIGGER_L;
 				Pad[chan].triggerLeft = 38;
 			}
 			else if(BTPad[chan].button & BT_TRIGGER_R)
 			{
-				button |= PAD_TRIGGER_L;
 				Pad[chan].triggerLeft = 51;
 			}
 			else if(BTPad[chan].button & BT_BUTTON_SELECT)
 			{
-				button |= PAD_TRIGGER_L;
 				Pad[chan].triggerLeft = 64;
 			}
 			else if(BTPad[chan].button & BT_BUTTON_START)
 			{
-				button |= PAD_TRIGGER_L;
 				Pad[chan].triggerLeft = 76;
 			}
 			else if(BTPad[chan].button & BT_BUTTON_Y)
 			{
-				button |= PAD_TRIGGER_L;
 				Pad[chan].triggerLeft = 89;
 			}
 			else if(BTPad[chan].button & BT_BUTTON_X)
 			{
-				button |= PAD_TRIGGER_L;
 				Pad[chan].triggerLeft = 102;
 			}
 			else
