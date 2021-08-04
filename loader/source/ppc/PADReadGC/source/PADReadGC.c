@@ -863,32 +863,46 @@ u32 PADRead(u32 calledByGame)
 		{
 			if(BTPad[chan].button & BT_TRIGGER_ZL)
 			{
+				button |= PAD_TRIGGER_ZL;
+				Pad[chan].triggerLeft = 12;
+			}
+			else if(BTPad[chan].button & BT_TRIGGER_ZR)
+			{
 				button |= PAD_TRIGGER_L;
-				Pad[chan].triggerLeft = 0xFF;
+				Pad[chan].triggerLeft = 25;
 			}
 			else if(BTPad[chan].button & BT_TRIGGER_L)
 			{
 				button |= PAD_TRIGGER_L;
-				Pad[chan].triggerLeft = 0x7F;
-			}
-			else
-				Pad[chan].triggerLeft = 0;
-
-			if(BTPad[chan].button & BT_TRIGGER_ZR)
-			{
-				button |= PAD_TRIGGER_R;
-				Pad[chan].triggerRight = 0xFF;
+				Pad[chan].triggerLeft = 38;
 			}
 			else if(BTPad[chan].button & BT_TRIGGER_R)
 			{
-				button |= PAD_TRIGGER_R;
-				Pad[chan].triggerRight = 0x7F;
+				button |= PAD_TRIGGER_L;
+				Pad[chan].triggerLeft = 51;
+			}
+			else if(BTPad[chan].button & BT_BUTTON_SELECT)
+			{
+				button |= PAD_TRIGGER_L;
+				Pad[chan].triggerLeft = 64;
+			}
+			else if(BTPad[chan].button & BT_BUTTON_START)
+			{
+				button |= PAD_TRIGGER_L;
+				Pad[chan].triggerLeft = 76;
+			}
+			else if(BTPad[chan].button & BT_BUTTON_Y)
+			{
+				button |= PAD_TRIGGER_L;
+				Pad[chan].triggerLeft = 89;
+			}
+			else if(BTPad[chan].button & BT_BUTTON_X)
+			{
+				button |= PAD_TRIGGER_L;
+				Pad[chan].triggerLeft = 102;
 			}
 			else
-				Pad[chan].triggerRight = 0;
-
-			if(BTPad[chan].button & BT_BUTTON_SELECT)
-				button |= PAD_TRIGGER_Z;
+				Pad[chan].triggerLeft = 0;
 		}
 
 // Nunchuck Buttons
@@ -1423,12 +1437,8 @@ u32 PADRead(u32 calledByGame)
 			{	/* turn buttons quarter clockwise */
 				if(BTPad[chan].button & BT_BUTTON_B)
 					button |= PAD_BUTTON_A;
-				if(BTPad[chan].button & BT_BUTTON_Y)
-					button |= PAD_BUTTON_B;
 				if(BTPad[chan].button & BT_BUTTON_A)
 					button |= PAD_BUTTON_X;
-				if(BTPad[chan].button & BT_BUTTON_X)
-					button |= PAD_BUTTON_Y;
 			}
 			else
 			{
@@ -1436,12 +1446,8 @@ u32 PADRead(u32 calledByGame)
 					button |= PAD_BUTTON_A;
 				if(BTPad[chan].button & BT_BUTTON_B)
 					button |= PAD_BUTTON_B;
-				if(BTPad[chan].button & BT_BUTTON_X)
-					button |= PAD_BUTTON_X;
-				if(BTPad[chan].button & BT_BUTTON_Y)
-					button |= PAD_BUTTON_Y;
 			}
-			if(BTPad[chan].button & BT_BUTTON_START || BTPad[chan].button & BT_BUTTON_HOME)
+			if(BTPad[chan].button & BT_BUTTON_HOME)
 				button |= PAD_BUTTON_START;
 
 			if(BTPad[chan].button & BT_DPAD_LEFT)
