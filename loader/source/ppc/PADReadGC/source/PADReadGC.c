@@ -161,24 +161,24 @@ u32 PADRead(u32 calledByGame)
 		if(drcbutton & WIIDRC_BUTTON_RIGHT) button |= PAD_BUTTON_RIGHT;
 		if(drcbutton & WIIDRC_BUTTON_UP) button |= PAD_BUTTON_UP;
 		if(drcbutton & WIIDRC_BUTTON_DOWN) button |= PAD_BUTTON_DOWN;
-		if(drcbutton & WIIDRC_BUTTON_ZL)
+		if(drcbutton & WIIDRC_BUTTON_L)
 		{
 			button |= PAD_TRIGGER_L;
 			Pad[WiiUGamepadSlot].triggerLeft = 0xFF;
 		}
-		else if(drcbutton & WIIDRC_BUTTON_L)
+		else if(drcbutton & WIIDRC_BUTTON_ZL)
 		{
 			button |= PAD_TRIGGER_L;
 			Pad[WiiUGamepadSlot].triggerLeft = 0x32;
 		}
 		else
 			Pad[WiiUGamepadSlot].triggerLeft = 0;
-		if(drcbutton & WIIDRC_BUTTON_ZR)
+		if(drcbutton & WIIDRC_BUTTON_R)
 		{
 			button |= PAD_TRIGGER_R;
 			Pad[WiiUGamepadSlot].triggerRight = 0xFF;
 		}
-		else if(drcbutton & WIIDRC_BUTTON_R)
+		else if(drcbutton & WIIDRC_BUTTON_ZR)
 		{
 			button |= PAD_TRIGGER_R;
 			Pad[WiiUGamepadSlot].triggerRight = 0x32;
@@ -861,12 +861,12 @@ u32 PADRead(u32 calledByGame)
 		}
 		else if(BTPad[chan].used & C_CCP)	//digital triggers
 		{
-			if(BTPad[chan].button & BT_TRIGGER_ZL)
+			if(BTPad[chan].button & BT_TRIGGER_L)
 			{
 				button |= PAD_TRIGGER_L;
 				Pad[chan].triggerLeft = 0xFF;
 			}
-			else if(BTPad[chan].button & BT_TRIGGER_L)
+			else if(BTPad[chan].button & BT_TRIGGER_ZL)
 			{
 				button |= PAD_TRIGGER_L;
 				Pad[chan].triggerLeft = 0x32;
@@ -874,12 +874,12 @@ u32 PADRead(u32 calledByGame)
 			else
 				Pad[chan].triggerLeft = 0;
 
-			if(BTPad[chan].button & BT_TRIGGER_ZR)
+			if(BTPad[chan].button & BT_TRIGGER_R)
 			{
 				button |= PAD_TRIGGER_R;
 				Pad[chan].triggerRight = 0xFF;
 			}
-			else if(BTPad[chan].button & BT_TRIGGER_R)
+			else if(BTPad[chan].button & BT_TRIGGER_ZR)
 			{
 				button |= PAD_TRIGGER_R;
 				Pad[chan].triggerRight = 0x32;

@@ -12,6 +12,6 @@
 
 // "Special" version.
 // This should only be set in custom builds, i.e. not mainline.
-#define NIN_SPECIAL_VERSION			"-libertyernie-l-r-big-buttons"
+#define NIN_SPECIAL_VERSION			"-libertyernie-l-r-direct-mapping"
 
 #endif
