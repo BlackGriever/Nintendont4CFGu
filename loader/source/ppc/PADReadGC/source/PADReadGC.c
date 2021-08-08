@@ -168,7 +168,6 @@ u32 PADRead(u32 calledByGame)
 		}
 		else if(drcbutton & WIIDRC_BUTTON_L)
 		{
-			button |= PAD_TRIGGER_L;
 			Pad[WiiUGamepadSlot].triggerLeft = 0x32;
 		}
 		else
@@ -180,7 +179,6 @@ u32 PADRead(u32 calledByGame)
 		}
 		else if(drcbutton & WIIDRC_BUTTON_R)
 		{
-			button |= PAD_TRIGGER_R;
 			Pad[WiiUGamepadSlot].triggerRight = 0x32;
 		}
 		else
@@ -844,14 +842,12 @@ u32 PADRead(u32 calledByGame)
 
 			if(BTPad[chan].button & BT_TRIGGER_ZL)
 			{
-				button |= PAD_TRIGGER_L;
 				if (Pad[chan].triggerLeft < 0x32)
 					Pad[chan].triggerLeft = 0x32;
 			}
 
 			if(BTPad[chan].button & BT_TRIGGER_ZR)
 			{
-				button |= PAD_TRIGGER_R;
 				if (Pad[chan].triggerRight < 0x32)
 					Pad[chan].triggerRight = 0x32;
 			}
@@ -868,7 +864,6 @@ u32 PADRead(u32 calledByGame)
 			}
 			else if(BTPad[chan].button & BT_TRIGGER_L)
 			{
-				button |= PAD_TRIGGER_L;
 				Pad[chan].triggerLeft = 0x32;
 			}
 			else
@@ -881,7 +876,6 @@ u32 PADRead(u32 calledByGame)
 			}
 			else if(BTPad[chan].button & BT_TRIGGER_R)
 			{
-				button |= PAD_TRIGGER_R;
 				Pad[chan].triggerRight = 0x32;
 			}
 			else
