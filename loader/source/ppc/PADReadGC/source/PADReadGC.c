@@ -49,6 +49,8 @@ static s8 OffsetY[NIN_CFG_MAXPAD] = {0};
 static s8 OffsetCX[NIN_CFG_MAXPAD] = {0};
 static s8 OffsetCY[NIN_CFG_MAXPAD] = {0};
 
+#define SHOULDER_PARTIAL_PRESS 0x7F
+
 #define DRC_SWAP (1<<16)
 
 const s8 DEADZONE = 0x1A;
@@ -168,7 +170,7 @@ u32 PADRead(u32 calledByGame)
 		}
 		else if(drcbutton & WIIDRC_BUTTON_ZL)
 		{
-			Pad[WiiUGamepadSlot].triggerLeft = 0x32;
+			Pad[WiiUGamepadSlot].triggerLeft = SHOULDER_PARTIAL_PRESS;
 		}
 		else
 			Pad[WiiUGamepadSlot].triggerLeft = 0;
@@ -179,7 +181,7 @@ u32 PADRead(u32 calledByGame)
 		}
 		else if(drcbutton & WIIDRC_BUTTON_ZR)
 		{
-			Pad[WiiUGamepadSlot].triggerRight = 0x32;
+			Pad[WiiUGamepadSlot].triggerRight = SHOULDER_PARTIAL_PRESS;
 		}
 		else
 			Pad[WiiUGamepadSlot].triggerRight = 0;
@@ -715,14 +717,14 @@ u32 PADRead(u32 calledByGame)
 		{	/* digital triggers, not much to do */
 			if(HID_Packet[HID_CTRL->L.Offset] & HID_CTRL->L.Mask)
 				if(HID_Packet[HID_CTRL->ZL.Offset] & HID_CTRL->ZL.Mask)	//ZL acts as shift for half pressed
-					Pad[chan].triggerLeft = 0x32;
+					Pad[chan].triggerLeft = SHOULDER_PARTIAL_PRESS;
 				else
 					Pad[chan].triggerLeft = 255;
 			else
 				Pad[chan].triggerLeft = 0;
 			if(HID_Packet[HID_CTRL->R.Offset] & HID_CTRL->R.Mask)
 				if(HID_Packet[HID_CTRL->ZL.Offset] & HID_CTRL->ZL.Mask)	//ZL acts as shift for half pressed
-					Pad[chan].triggerRight = 0x32;
+					Pad[chan].triggerRight = SHOULDER_PARTIAL_PRESS;
 				else
 					Pad[chan].triggerRight = 255;
 			else
@@ -842,14 +844,14 @@ u32 PADRead(u32 calledByGame)
 
 			if(BTPad[chan].button & BT_TRIGGER_ZL)
 			{
-				if (Pad[chan].triggerLeft < 0x32)
-					Pad[chan].triggerLeft = 0x32;
+				if (Pad[chan].triggerLeft < SHOULDER_PARTIAL_PRESS)
+					Pad[chan].triggerLeft = SHOULDER_PARTIAL_PRESS;
 			}
 
 			if(BTPad[chan].button & BT_TRIGGER_ZR)
 			{
-				if (Pad[chan].triggerRight < 0x32)
-					Pad[chan].triggerRight = 0x32;
+				if (Pad[chan].triggerRight < SHOULDER_PARTIAL_PRESS)
+					Pad[chan].triggerRight = SHOULDER_PARTIAL_PRESS;
 			}
 
 			if(BTPad[chan].button & BT_BUTTON_SELECT)
@@ -864,7 +866,7 @@ u32 PADRead(u32 calledByGame)
 			}
 			else if(BTPad[chan].button & BT_TRIGGER_ZL)
 			{
-				Pad[chan].triggerLeft = 0x32;
+				Pad[chan].triggerLeft = SHOULDER_PARTIAL_PRESS;
 			}
 			else
 				Pad[chan].triggerLeft = 0;
@@ -876,7 +878,7 @@ u32 PADRead(u32 calledByGame)
 			}
 			else if(BTPad[chan].button & BT_TRIGGER_ZR)
 			{
-				Pad[chan].triggerRight = 0x32;
+				Pad[chan].triggerRight = SHOULDER_PARTIAL_PRESS;
 			}
 			else
 				Pad[chan].triggerRight = 0;
@@ -1013,7 +1015,7 @@ u32 PADRead(u32 calledByGame)
 					//C		pressed Dpad=Standard B=R1/2 Z=L1/2 tilt controls cStick
 					if((BTPad[chan].button & NUN_BUTTON_Z) &&
 					   (BTPad[chan].button & NUN_BUTTON_C))
-						Pad[chan].triggerLeft = 0x32;
+						Pad[chan].triggerLeft = SHOULDER_PARTIAL_PRESS;
 					else
 					if(BTPad[chan].button & NUN_BUTTON_Z)
 					{
@@ -1021,13 +1023,13 @@ u32 PADRead(u32 calledByGame)
 						Pad[chan].triggerLeft = 0xFF;
 					}
 //					else if(BTPad[chan].button & WM_BUTTON_MINUS)
-//						Pad[chan].triggerLeft = 0x32;
+//						Pad[chan].triggerLeft = SHOULDER_PARTIAL_PRESS;
 					else
 						Pad[chan].triggerLeft = 0;
 
 					if((BTPad[chan].button & WM_BUTTON_B) &&
 					   (BTPad[chan].button & NUN_BUTTON_C))
-						Pad[chan].triggerRight = 0x32;
+						Pad[chan].triggerRight = SHOULDER_PARTIAL_PRESS;
 					else
 					if(BTPad[chan].button & WM_BUTTON_B)
 					{
@@ -1035,7 +1037,7 @@ u32 PADRead(u32 calledByGame)
 						Pad[chan].triggerRight = 0xFF;
 					}
 //					else if(BTPad[chan].button & WM_BUTTON_PLUS)
-//						Pad[chan].triggerRight = 0x32;
+//						Pad[chan].triggerRight = SHOULDER_PARTIAL_PRESS;
 					else
 						Pad[chan].triggerRight = 0;
 
@@ -1300,7 +1302,7 @@ u32 PADRead(u32 calledByGame)
 					}
 
 					if((BTPad[chan].button & NUN_BUTTON_Z) && (BTPad[chan].button & NUN_BUTTON_C))
-						Pad[chan].triggerLeft = 0x32;
+						Pad[chan].triggerLeft = SHOULDER_PARTIAL_PRESS;
 					else if(BTPad[chan].button & NUN_BUTTON_Z)
 					{
 						button |= PAD_TRIGGER_L;
@@ -1310,7 +1312,7 @@ u32 PADRead(u32 calledByGame)
 						Pad[chan].triggerLeft = 0;
 
 					if((BTPad[chan].button & WM_BUTTON_B) && (BTPad[chan].button & NUN_BUTTON_C))
-						Pad[chan].triggerRight = 0x32;
+						Pad[chan].triggerRight = SHOULDER_PARTIAL_PRESS;
 					else if(BTPad[chan].button & WM_BUTTON_B)
 					{
 						button |= PAD_TRIGGER_R;
@@ -1335,7 +1337,7 @@ u32 PADRead(u32 calledByGame)
 						Pad[chan].triggerLeft = 0xFF;
 					}
 					else if(BTPad[chan].button & WM_BUTTON_MINUS)
-						Pad[chan].triggerLeft = 0x32;
+						Pad[chan].triggerLeft = SHOULDER_PARTIAL_PRESS;
 					else if(BTPad[chan].button & NUN_BUTTON_C)
 					{
 						//	use tilt as AnalogL
@@ -1359,7 +1361,7 @@ u32 PADRead(u32 calledByGame)
 						Pad[chan].triggerRight = 0xFF;
 					}
 					else if(BTPad[chan].button & WM_BUTTON_PLUS)
-						Pad[chan].triggerRight = 0x32;
+						Pad[chan].triggerRight = SHOULDER_PARTIAL_PRESS;
 					else if(BTPad[chan].button & NUN_BUTTON_C)
 					{
 						//	use tilt as AnalogR
