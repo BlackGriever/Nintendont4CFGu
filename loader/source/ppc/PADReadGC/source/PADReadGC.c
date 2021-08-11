@@ -863,38 +863,38 @@ u32 PADRead(u32 calledByGame)
 		{
 			if(BTPad[chan].button & BT_TRIGGER_ZL)
 			{
-				Pad[chan].triggerLeft = 12;
+				Pad[chan].triggerRight = 12;
 			}
 			else if(BTPad[chan].button & BT_TRIGGER_ZR)
 			{
-				Pad[chan].triggerLeft = 25;
+				Pad[chan].triggerRight = 25;
 			}
 			else if(BTPad[chan].button & BT_TRIGGER_L)
 			{
-				Pad[chan].triggerLeft = 38;
+				Pad[chan].triggerRight = 38;
 			}
 			else if(BTPad[chan].button & BT_TRIGGER_R)
 			{
-				Pad[chan].triggerLeft = 51;
+				Pad[chan].triggerRight = 51;
 			}
 			else if(BTPad[chan].button & BT_BUTTON_SELECT)
 			{
-				Pad[chan].triggerLeft = 64;
+				Pad[chan].triggerRight = 64;
 			}
 			else if(BTPad[chan].button & BT_BUTTON_START)
 			{
-				Pad[chan].triggerLeft = 76;
+				Pad[chan].triggerRight = 76;
 			}
 			else if(BTPad[chan].button & BT_BUTTON_Y)
 			{
-				Pad[chan].triggerLeft = 89;
+				Pad[chan].triggerRight = 89;
 			}
 			else if(BTPad[chan].button & BT_BUTTON_X)
 			{
-				Pad[chan].triggerLeft = 102;
+				Pad[chan].triggerRight = 102;
 			}
 			else
-				Pad[chan].triggerLeft = 0;
+				Pad[chan].triggerRight = 0;
 		}
 
 // Nunchuck Buttons
