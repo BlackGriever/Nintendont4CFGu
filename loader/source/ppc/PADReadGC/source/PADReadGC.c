@@ -239,9 +239,19 @@ u32 PADRead(u32 calledByGame)
 		else if (*TitleID == 0x47564D || *TitleID == 0x473353)
 		{
 			// Bust-a-Move 3000
-			if (Pad[WiiUGamepadSlot].button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT)
+			if (Pad[WiiUGamepadSlot].button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT))
 			{
 				Pad[WiiUGamepadSlot].button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN);
+			}
+
+			if (abs(Pad[WiiUGamepadSlot].stickX) > abs(Pad[WiiUGamepadSlot].stickY)) {
+				// Left and right
+				Pad[WiiUGamepadSlot].stickY = 0;
+			}
+			else
+			{
+				// Top and bottom
+				Pad[WiiUGamepadSlot].stickX = 0;
 			}
 		}
 	}
@@ -1485,9 +1495,19 @@ u32 PADRead(u32 calledByGame)
 		else if (*TitleID == 0x47564D || *TitleID == 0x473353)
 		{
 			// Bust-a-Move 3000
-			if (button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT)
+			if (button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT))
 			{
 				button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN);
+			}
+
+			if (abs(Pad[chan].stickX) > abs(Pad[chan].stickY)) {
+				// Left and right
+				Pad[chan].stickY = 0;
+			}
+			else
+			{
+				// Top and bottom
+				Pad[chan].stickX = 0;
 			}
 		}
 
