@@ -49,7 +49,7 @@ static s8 OffsetY[NIN_CFG_MAXPAD] = {0};
 static s8 OffsetCX[NIN_CFG_MAXPAD] = {0};
 static s8 OffsetCY[NIN_CFG_MAXPAD] = {0};
 
-#define SHOULDER_PARTIAL_PRESS 0x7F
+#define SHOULDER_PARTIAL_PRESS 0x32
 
 #define DRC_SWAP (1<<16)
 
@@ -235,6 +235,14 @@ u32 PADRead(u32 calledByGame)
 			// Map Select to D-pad down
 			if (drcbutton & WIIDRC_BUTTON_MINUS)
 				Pad[WiiUGamepadSlot].button |= PAD_BUTTON_DOWN;
+		}
+		else if (*TitleID == 0x47564D || *TitleID == 0x473353)
+		{
+			// Bust-a-Move 3000
+			if (Pad[WiiUGamepadSlot].button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT)
+			{
+				Pad[WiiUGamepadSlot].button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN);
+			}
 		}
 	}
 	else
@@ -1473,8 +1481,16 @@ u32 PADRead(u32 calledByGame)
 				// Hide D-pad from game (will be used to emulate joystick)
 				button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN | PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT);
 			}
-		}	
-		
+		}
+		else if (*TitleID == 0x47564D || *TitleID == 0x473353)
+		{
+			// Bust-a-Move 3000
+			if (button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT)
+			{
+				button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN);
+			}
+		}
+
 		Pad[chan].button = button;
 
 //#define DEBUG_cStick	1
