@@ -244,14 +244,33 @@ u32 PADRead(u32 calledByGame)
 				Pad[WiiUGamepadSlot].button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN);
 			}
 
-			if (abs(Pad[WiiUGamepadSlot].stickX) > abs(Pad[WiiUGamepadSlot].stickY)) {
-				// Left and right
+			s8 x = Pad[WiiUGamepadSlot].stickX;
+			s8 y = Pad[WiiUGamepadSlot].stickY;
+			s8 quadrant = x > 0 && y > 0 ? 1
+				: x < 0 && y > 0 ? 2
+				: x < 0 ? 3
+				: 4;
+			char dir = quadrant == 1 ? (x >= y ? 'E' : 'N')
+				: quadrant == 2 ? (-x >= y ? 'W' : 'N')
+				: quadrant == 3 ? (-x >= -y ? 'W' : 'S')
+				: (x >= -y ? 'E' : 'S');
+
+			if (dir == 'N') {
+				// Up
+				Pad[WiiUGamepadSlot].stickX = 0;
+			}
+			else if (dir == 'S') {
+				// Down
+				Pad[WiiUGamepadSlot].stickX = 0;
+			}
+			else if (dir == 'W') {
+				// Right
 				Pad[WiiUGamepadSlot].stickY = 0;
 			}
 			else
 			{
-				// Top and bottom
-				Pad[WiiUGamepadSlot].stickX = 0;
+				// Left
+				Pad[WiiUGamepadSlot].stickY = 0;
 			}
 		}
 	}
@@ -1491,23 +1510,42 @@ u32 PADRead(u32 calledByGame)
 				// Hide D-pad from game (will be used to emulate joystick)
 				button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN | PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT);
 			}
-		}
-		else if (*TitleID == 0x47564D || *TitleID == 0x473353)
-		{
-			// Bust-a-Move 3000
-			if (button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT))
+			else if (*TitleID == 0x47564D || *TitleID == 0x473353)
 			{
-				button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN);
-			}
+				// Bust-a-Move 3000
+				if (button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT))
+				{
+					button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN);
+				}
 
-			if (abs(Pad[chan].stickX) > abs(Pad[chan].stickY)) {
-				// Left and right
-				Pad[chan].stickY = 0;
-			}
-			else
-			{
-				// Top and bottom
-				Pad[chan].stickX = 0;
+				s8 x = Pad[WiiUGamepadSlot].stickX;
+				s8 y = Pad[WiiUGamepadSlot].stickY;
+				s8 quadrant = x > 0 && y > 0 ? 1
+					: x < 0 && y > 0 ? 2
+					: x < 0 ? 3
+					: 4;
+				char dir = quadrant == 1 ? (x >= y ? 'E' : 'N')
+					: quadrant == 2 ? (-x >= y ? 'W' : 'N')
+					: quadrant == 3 ? (-x >= -y ? 'W' : 'S')
+					: (x >= -y ? 'E' : 'S');
+
+				if (dir == 'N') {
+					// Up
+					Pad[chan].stickX = 0;
+				}
+				else if (dir == 'S') {
+					// Down
+					Pad[chan].stickX = 0;
+				}
+				else if (dir == 'W') {
+					// Right
+					Pad[chan].stickY = 0;
+				}
+				else
+				{
+					// Left
+					Pad[chan].stickY = 0;
+				}
 			}
 		}
 
