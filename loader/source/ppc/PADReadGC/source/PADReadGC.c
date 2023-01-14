@@ -27,6 +27,8 @@ static vu32* PADIsBarrel = (vu32*)0xD3003130;
 static vu32* PADBarrelEnabled = (vu32*)0xD3003140;
 static vu32* PADBarrelPress = (vu32*)0xD3003150;
 
+static vu32* TitleID = (vu32*)0x932C0498;
+
 static volatile struct BTPadCont *BTPad = (volatile struct BTPadCont*)0x932F0000;
 static vu32* BTMotor = (vu32*)0x93003040;
 static vu32* BTPadFree = (vu32*)0x93003050;
