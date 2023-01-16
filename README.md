@@ -1,10 +1,12 @@
 ## Nintendont - libertyernie's build
 
-Changes:
+Changes from upstream (https://github.com/FIX94/Nintendont) in this branch:
 
-* Exit is now L+Home, and swapping between Y/B and B/A is now L+Minus (thanks Raflos10)
 * You can load a base64-encoded nincfg.bin from the command line (for loading specific games directly from Homebrew Channel entries; also see [NinCFGEditor](https://github.com/libertyernie/NinCFGEditor))
-* Special controller overrides for the Classic Controller. Classic Controller Pro, and Wii U GamePad in certain games:
+* Classic Controller / Classic Controller Pro and Wii U GamePad changes:
+    * Exit is now L+Home instead of Home
+	* Swap (Y/B vs. B/A) is now L+Minus instead of Minus
+* Special controller overrides for the Classic Controller and Classic Controller Pro in certain games (these do not apply to other controllers):
     * **The Legend of Zelda: Four Swords Adventures**
 	    * D-Pad => Left Stick
 		* Select => D-Pad Down
