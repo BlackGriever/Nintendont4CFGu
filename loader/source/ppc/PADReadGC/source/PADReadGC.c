@@ -125,34 +125,32 @@ u32 PADRead(u32 calledByGame)
 		if(drcbutton & WIIDRC_BUTTON_RIGHT) button |= PAD_BUTTON_RIGHT;
 		if(drcbutton & WIIDRC_BUTTON_UP) button |= PAD_BUTTON_UP;
 		if(drcbutton & WIIDRC_BUTTON_DOWN) button |= PAD_BUTTON_DOWN;
-		//also sets left analog trigger
-		if(drcbutton & WIIDRC_BUTTON_ZL)
-		{
-			//Check half-press by holding L
-			if(drcbutton & WIIDRC_BUTTON_L)
-				Pad[0].triggerLeft = 0x7F;
-			else
-			{
-				button |= PAD_TRIGGER_L;
-				Pad[0].triggerLeft = 0xFF;
-			}
+
+		if (drcbutton & WIIDRC_BUTTON_ZL) {
+			button |= PAD_TRIGGER_L;
+			Pad[0].triggerLeft = 0xFF;
 		}
-		else
+		else if (drcbutton & WIIDRC_BUTTON_L) {
+			Pad[0].triggerLeft = 0x7F;
+		}
+		else {
 			Pad[0].triggerLeft = 0;
-		//also sets right analog trigger
-		if(drcbutton & WIIDRC_BUTTON_ZR)
-		{
-			//Check half-press by holding L
-			if(drcbutton & WIIDRC_BUTTON_L)
-				Pad[0].triggerRight = 0x7F;
-			else
-			{
-				button |= PAD_TRIGGER_R;
-				Pad[0].triggerRight = 0xFF;
-			}
 		}
-		else
+
+		if (drcbutton & WIIDRC_BUTTON_ZR) {
+			button |= PAD_TRIGGER_R;
+			Pad[0].triggerRight = 0xFF;
+		}
+		else if (drcbutton & WIIDRC_BUTTON_R) {
+			Pad[0].triggerRight = 0x7F;
+		}
+		else {
 			Pad[0].triggerRight = 0;
+		}
+
+		if (drcbutton & WIIDRC_BUTTON_MINUS)
+			button |= PAD_TRIGGER_Z;
+
 		if(drcbutton & WIIDRC_BUTTON_R) button |= PAD_TRIGGER_Z;
 		if(drcbutton & WIIDRC_BUTTON_PLUS) button |= PAD_BUTTON_START;
 
