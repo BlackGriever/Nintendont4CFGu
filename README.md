@@ -6,7 +6,7 @@ Changes from upstream (https://github.com/FIX94/Nintendont) in this branch:
 * Classic Controller / Classic Controller Pro and Wii U GamePad changes:
     * Exit is now L+Home instead of Home
 	* Swap (Y/B vs. B/A) is now L+Minus instead of Minus
-* Special controller overrides for the Classic Controller and Classic Controller Pro in certain games (these do not apply to other controllers):
+* Special controller overrides for the Classic Controller, Classic Controller Pro, and Wii U GamePad:
     * **The Legend of Zelda: Four Swords Adventures**
 	    * D-Pad => Left Stick
 		* Select => D-Pad Down
