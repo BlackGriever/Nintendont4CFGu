@@ -51,6 +51,8 @@ static vu32* SensorBarPosition = (u32*)0x132C0494;
 
 static const u8 LEDState[] = { 0x10, 0x20, 0x40, 0x80, 0xF0 };
 
+extern u32 TITLE_ID;
+
 #define CHAN_NOT_SET 4
 
 #define TRANSFER_CONNECT 0
@@ -116,7 +118,8 @@ static s32 BTHandleData(void *arg,void *buffer,u16 len)
 		BTPad[chan].yAxisR = ((bswap16(R16((u32)(((u8*)buffer)+7))) - stat->yAxisRmid) *3) >>5;
 		u32 prevButton = BTPad[chan].button;
 		BTPad[chan].button = ~(R16((u32)(((u8*)buffer)+9)));
-		if((!(prevButton & BT_BUTTON_SELECT)) && BTPad[chan].button & BT_BUTTON_SELECT)
+		//L+minus for button swap
+		if((!((prevButton & BT_TRIGGER_L) && (prevButton & BT_BUTTON_SELECT))) && ((BTPad[chan].button & BT_TRIGGER_L) && (BTPad[chan].button & BT_BUTTON_SELECT)))
 		{
 			//dbgprintf("Using %s control scheme\n", (stat->controller & C_SWAP) ? "orginal" : "swapped");
 			stat->controller = (stat->controller & C_SWAP) ? (stat->controller & ~C_SWAP) : (stat->controller | C_SWAP);
@@ -164,7 +167,8 @@ static s32 BTHandleData(void *arg,void *buffer,u16 len)
 
 		u32 prevButton = BTPad[chan].button;
 		BTPad[chan].button = ~(R16((u32)(((u8*)buffer)+7))) | (*((u8*)buffer+2) & 0x10)<<4; //unused 0x100 for wiimote button Minus
-		if((!(prevButton & BT_BUTTON_SELECT)) && BTPad[chan].button & BT_BUTTON_SELECT)
+		//L+minus for button swap
+		if((!((prevButton & BT_TRIGGER_L) && (prevButton & BT_BUTTON_SELECT))) && ((BTPad[chan].button & BT_TRIGGER_L) && (BTPad[chan].button & BT_BUTTON_SELECT)))
 		{
 			//dbgprintf("Using %s control scheme\n", (stat->controller & C_SWAP) ? "orginal" : "swapped");
 			stat->controller = (stat->controller & C_SWAP) ? (stat->controller & ~C_SWAP) : (stat->controller | C_SWAP);
@@ -178,6 +182,7 @@ static s32 BTHandleData(void *arg,void *buffer,u16 len)
 			sync_after_write(arg, sizeof(struct BTPadStat));
 			sync_before_read(arg, sizeof(struct BTPadStat));
 		}
+
 		BTPad[chan].used = stat->controller;
 		sync_after_write(&BTPad[chan], sizeof(struct BTPadCont));
 	}
