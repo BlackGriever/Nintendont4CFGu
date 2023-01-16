@@ -1295,7 +1295,10 @@ u32 PADRead(u32 calledByGame)
 				if(BTPad[chan].button & BT_BUTTON_Y)
 					button |= PAD_BUTTON_Y;
 			}
+
 			if(BTPad[chan].button & BT_BUTTON_START)
+				button |= PAD_BUTTON_START;
+			if(BTPad[chan].button & BT_BUTTON_HOME)
 				button |= PAD_BUTTON_START;
 			
 			if(BTPad[chan].button & BT_DPAD_LEFT)
@@ -1306,10 +1309,6 @@ u32 PADRead(u32 calledByGame)
 				button |= PAD_BUTTON_DOWN;
 			if(BTPad[chan].button & BT_DPAD_UP)
 				button |= PAD_BUTTON_UP;
-
-			//L+HOME to exit
-			if((BTPad[chan].button & BT_TRIGGER_L) && (BTPad[chan].button & BT_BUTTON_HOME))
-				goto DoExit;
 		}	
 		
 		Pad[chan].button = button;
