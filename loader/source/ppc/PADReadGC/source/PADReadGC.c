@@ -242,6 +242,53 @@ u32 PADRead(u32 calledByGame)
 			if (drcbutton & WIIDRC_BUTTON_MINUS)
 				Pad[WiiUGamepadSlot].button |= PAD_BUTTON_DOWN;
 		}
+		else if (*TitleID == 0x47564D || *TitleID == 0x473353)
+		{
+			// Bust-a-Move 3000
+			if (Pad[WiiUGamepadSlot].button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT))
+			{
+				Pad[WiiUGamepadSlot].button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN);
+			}
+
+			if ((drcbutton & WIIDRC_BUTTON_L) || (drcbutton & WIIDRC_BUTTON_ZL)) {
+				button |= PAD_TRIGGER_L;
+				Pad[WiiUGamepadSlot].triggerLeft = 0xFF;
+			}
+
+			if ((drcbutton & WIIDRC_BUTTON_R) || (drcbutton & WIIDRC_BUTTON_ZR)) {
+				button |= PAD_TRIGGER_R;
+				Pad[WiiUGamepadSlot].triggerRight = 0xFF;
+			}
+
+			s8 x = Pad[WiiUGamepadSlot].stickX;
+			s8 y = Pad[WiiUGamepadSlot].stickY;
+			s8 quadrant = x > 0 && y > 0 ? 1
+				: x < 0 && y > 0 ? 2
+				: x < 0 ? 3
+				: 4;
+			char dir = quadrant == 1 ? (x >= y ? 'E' : 'N')
+				: quadrant == 2 ? (-x >= y ? 'W' : 'N')
+				: quadrant == 3 ? (-x >= -y ? 'W' : 'S')
+				: (x >= -y ? 'E' : 'S');
+
+			if (dir == 'N') {
+				// Up
+				Pad[WiiUGamepadSlot].stickX = 0;
+			}
+			else if (dir == 'S') {
+				// Down
+				Pad[WiiUGamepadSlot].stickX = 0;
+			}
+			else if (dir == 'W') {
+				// Right
+				Pad[WiiUGamepadSlot].stickY = 0;
+			}
+			else
+			{
+				// Left
+				Pad[WiiUGamepadSlot].stickY = 0;
+			}
+		}
 	}
 	else
 	{
@@ -1485,8 +1532,55 @@ u32 PADRead(u32 calledByGame)
 				if (BTPad[chan].button & BT_BUTTON_SELECT)
 					button |= PAD_BUTTON_DOWN;
 			}
-		}	
-		
+			else if (*TitleID == 0x47564D || *TitleID == 0x473353)
+			{
+				// Bust-a-Move 3000
+				if (button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT))
+				{
+					button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN);
+				}
+
+				if ((BTPad[chan].button & BT_TRIGGER_L) || (BTPad[chan].button & BT_TRIGGER_ZL)) {
+					button |= PAD_TRIGGER_L;
+					Pad[chan].triggerLeft = 0xFF;
+				}
+
+				if ((BTPad[chan].button & BT_TRIGGER_R) || (BTPad[chan].button & BT_TRIGGER_ZR)) {
+					button |= PAD_TRIGGER_R;
+					Pad[chan].triggerRight = 0xFF;
+				}
+
+				s8 x = Pad[chan].stickX;
+				s8 y = Pad[chan].stickY;
+				s8 quadrant = x > 0 && y > 0 ? 1
+					: x < 0 && y > 0 ? 2
+					: x < 0 ? 3
+					: 4;
+				char dir = quadrant == 1 ? (x >= y ? 'E' : 'N')
+					: quadrant == 2 ? (-x >= y ? 'W' : 'N')
+					: quadrant == 3 ? (-x >= -y ? 'W' : 'S')
+					: (x >= -y ? 'E' : 'S');
+
+				if (dir == 'N') {
+					// Up
+					Pad[chan].stickX = 0;
+				}
+				else if (dir == 'S') {
+					// Down
+					Pad[chan].stickX = 0;
+				}
+				else if (dir == 'W') {
+					// Right
+					Pad[chan].stickY = 0;
+				}
+				else
+				{
+					// Left
+					Pad[chan].stickY = 0;
+				}
+			}
+		}
+
 		Pad[chan].button = button;
 
 //#define DEBUG_cStick	1
