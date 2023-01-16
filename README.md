@@ -1,3 +1,26 @@
+# libertyernie's custom build
+
+Changes from upstream (https://github.com/revvv/Nintendont-XBOX360):
+
+* Ability to use base64-encoded nincfg.bin contents as command line argument
+* Classic Controller and Classic Controller Pro mappings changed:
+    * Large left shoulder button -> full L press
+    * Small left shoulder button -> half L press
+    * Large right shoulder button -> full R press
+    * Small right shoulder button -> half R press
+    * Home -> Start
+    * Select (Minus) -> Z
+* Controller shortcuts to swap buttons (Y/B vs. B/A) or exit Nintendont have been removed
+* Special controller overrides for the Classic Controller and Classic Controller Pro in certain games:
+    * The Legend of Zelda: Four Swords Adventures
+        * D-Pad => Left Stick
+        * Select => D-Pad Down
+    * Super Puzzle Bobble / Bust-A-Move 3000 / Bust-A-Move All-Stars
+        * Both left shoulder buttons -> full L press
+        * Both right shoulder buttons -> full R press
+        * D-pad diagonals -> D-pad horizontals
+        * Analog stick diagonals -> analog stick horizontals or verticals (whichever is closer)
+
 ### Nintendont with XBOX360 controller support
 * Only XBOX360 **wired version** is supported (VID=0x045e, PID=0x028e)
 * You control player 1.
