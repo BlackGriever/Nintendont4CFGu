@@ -118,18 +118,6 @@ u32 PADRead(u32 calledByGame)
 		//Start out mapping buttons first
 		u16 button = 0;
 		u16 drcbutton = (i2cdata[2]<<8) | (i2cdata[3]);
-		//swap abxy when L+minus is pressed
-		if((!((PrevDRCButton & WIIDRC_BUTTON_L) && (PrevDRCButton & WIIDRC_BUTTON_MINUS))) && ((drcbutton & WIIDRC_BUTTON_L) && (drcbutton & WIIDRC_BUTTON_MINUS)))
-			PrevDRCButton ^= DRC_SWAP;
-		PrevDRCButton = (PrevDRCButton & DRC_SWAP) | drcbutton;
-		if(PrevDRCButton & DRC_SWAP)
-		{	/* turn buttons quarter clockwise */
-			if(drcbutton & WIIDRC_BUTTON_B) button |= PAD_BUTTON_A;
-			if(drcbutton & WIIDRC_BUTTON_Y) button |= PAD_BUTTON_B;
-			if(drcbutton & WIIDRC_BUTTON_A) button |= PAD_BUTTON_X;
-			if(drcbutton & WIIDRC_BUTTON_X) button |= PAD_BUTTON_Y;
-		}
-		else
 		{
 			if(drcbutton & WIIDRC_BUTTON_A) button |= PAD_BUTTON_A;
 			if(drcbutton & WIIDRC_BUTTON_B) button |= PAD_BUTTON_B;
@@ -170,8 +158,6 @@ u32 PADRead(u32 calledByGame)
 			Pad[0].triggerRight = 0;
 		if(drcbutton & WIIDRC_BUTTON_R) button |= PAD_TRIGGER_Z;
 		if(drcbutton & WIIDRC_BUTTON_PLUS) button |= PAD_BUTTON_START;
-		//L+HOME to exit
-		if((drcbutton & WIIDRC_BUTTON_L) && (drcbutton & WIIDRC_BUTTON_HOME)) goto DoExit;
 
 		//write in mapped out buttons
 		Pad[0].button = button;
@@ -293,11 +279,6 @@ u32 PADRead(u32 calledByGame)
 					Pad[chan].triggerRight = 0;
 			}
 
-			/* exit by pressing B,Z,R,PAD_BUTTON_DOWN */
-			if((Pad[chan].button&0x234) == 0x234)
-			{
-				goto DoExit;
-			}
 			if((Pad[chan].button&0x1030) == 0x1030)	//reset by pressing start, Z, R
 			{
 				/* reset status 3 */
@@ -383,11 +364,6 @@ u32 PADRead(u32 calledByGame)
 			}
 		}
 
-		if(calledByGame && HID_CTRL->Power.Mask &&	//exit if power configured and all power buttons pressed
-		((HID_Packet[HID_CTRL->Power.Offset] & HID_CTRL->Power.Mask) == HID_CTRL->Power.Mask))
-		{
-			goto DoExit;
-		}
 		used |= (1<<chan);
 
 		Rumble |= ((1<<31)>>chan);
@@ -1331,18 +1307,6 @@ u32 PADRead(u32 calledByGame)
 
 		if(BTPad[chan].used & (C_CC | C_CCP))
 		{
-			if(BTPad[chan].used & C_SWAP)
-			{	/* turn buttons quarter clockwise */
-				if(BTPad[chan].button & BT_BUTTON_B)
-					button |= PAD_BUTTON_A;
-				if(BTPad[chan].button & BT_BUTTON_Y)
-					button |= PAD_BUTTON_B;
-				if(BTPad[chan].button & BT_BUTTON_A)
-					button |= PAD_BUTTON_X;
-				if(BTPad[chan].button & BT_BUTTON_X)
-					button |= PAD_BUTTON_Y;
-			}
-			else
 			{
 				if(BTPad[chan].button & BT_BUTTON_A)
 					button |= PAD_BUTTON_A;
