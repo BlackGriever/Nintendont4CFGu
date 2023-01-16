@@ -27,6 +27,8 @@ static vu32* PADIsBarrel = (vu32*)0xD3003130;
 static vu32* PADBarrelEnabled = (vu32*)0xD3003140;
 static vu32* PADBarrelPress = (vu32*)0xD3003150;
 
+static vu32* TitleID = (vu32*)0x932C0498;
+
 static volatile struct BTPadCont *BTPad = (volatile struct BTPadCont*)0x932F0000;
 static vu32* BTMotor = (vu32*)0x93003040;
 static vu32* BTPadFree = (vu32*)0x93003050;
@@ -1259,7 +1261,7 @@ u32 PADRead(u32 calledByGame)
 						Pad[chan].triggerLeft = 0xFF;
 					}
 					else if(BTPad[chan].button & WM_BUTTON_MINUS)
-						Pad[chan].triggerLeft = 0x7F; 
+						Pad[chan].triggerLeft = 0x7F;
 					else if(BTPad[chan].button & NUN_BUTTON_C)
 					{
 						//	use tilt as AnalogL
@@ -1372,11 +1374,87 @@ u32 PADRead(u32 calledByGame)
 				button |= PAD_BUTTON_DOWN;
 			if(BTPad[chan].button & BT_DPAD_UP)
 				button |= PAD_BUTTON_UP;
-			
+
 			if(BTPad[chan].button & BT_BUTTON_HOME)
 				goto DoExit;
-		}	
-		
+
+			if (*TitleID == 0x473453) {
+				// The Legend of Zelda: Four Swords Adventures
+
+				if (BTPad[chan].button & (BT_DPAD_UP | BT_DPAD_DOWN | BT_DPAD_LEFT | BT_DPAD_RIGHT)) {
+					// D-pad pressed - override joystick
+					Pad[chan].stickX = 0;
+					Pad[chan].stickY = 0;
+					if (BTPad[chan].button & BT_DPAD_UP) {
+						Pad[chan].stickY += 0x7F;
+					}
+					if (BTPad[chan].button & BT_DPAD_DOWN) {
+						Pad[chan].stickY -= 0x7F;
+					}
+					if (BTPad[chan].button & BT_DPAD_LEFT) {
+						Pad[chan].stickX -= 0x7F;
+					}
+					if (BTPad[chan].button & BT_DPAD_RIGHT) {
+						Pad[chan].stickX += 0x7F;
+					}
+				}
+
+				// Hide D-pad from game (will be used to emulate joystick)
+				button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN | PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT);
+
+				// Map Select to D-pad down
+				if (BTPad[chan].button & BT_BUTTON_SELECT)
+					button |= PAD_BUTTON_DOWN;
+			}
+			else if (*TitleID == 0x47564D || *TitleID == 0x473353)
+			{
+				// Bust-a-Move 3000
+				if (button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT))
+				{
+					button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN);
+				}
+
+				if ((BTPad[chan].button & BT_TRIGGER_L) || (BTPad[chan].button & BT_TRIGGER_ZL)) {
+					button |= PAD_TRIGGER_L;
+					Pad[chan].triggerLeft = 0xFF;
+				}
+
+				if ((BTPad[chan].button & BT_TRIGGER_R) || (BTPad[chan].button & BT_TRIGGER_ZR)) {
+					button |= PAD_TRIGGER_R;
+					Pad[chan].triggerRight = 0xFF;
+				}
+
+				s8 x = Pad[chan].stickX;
+				s8 y = Pad[chan].stickY;
+				s8 quadrant = x > 0 && y > 0 ? 1
+					: x < 0 && y > 0 ? 2
+					: x < 0 ? 3
+					: 4;
+				char dir = quadrant == 1 ? (x >= y ? 'E' : 'N')
+					: quadrant == 2 ? (-x >= y ? 'W' : 'N')
+					: quadrant == 3 ? (-x >= -y ? 'W' : 'S')
+					: (x >= -y ? 'E' : 'S');
+
+				if (dir == 'N') {
+					// Up
+					Pad[chan].stickX = 0;
+				}
+				else if (dir == 'S') {
+					// Down
+					Pad[chan].stickX = 0;
+				}
+				else if (dir == 'W') {
+					// Right
+					Pad[chan].stickY = 0;
+				}
+				else
+				{
+					// Left
+					Pad[chan].stickY = 0;
+				}
+			}
+		}
+
 		Pad[chan].button = button;
 
 //#define DEBUG_cStick	1
