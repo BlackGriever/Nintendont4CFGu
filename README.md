@@ -1,3 +1,22 @@
+## Nintendont - libertyernie's build
+
+Changes:
+
+* Exit is now L+Home, and swapping between Y/B and B/A is now L+Minus (thanks Raflos10)
+* You can load a base64-encoded nincfg.bin from the command line (for loading specific games directly from Homebrew Channel entries; also see [NinCFGEditor](https://github.com/libertyernie/NinCFGEditor))
+* Special controller overrides for the Classic Controller. Classic Controller Pro, and Wii U GamePad in certain games:
+    * **The Legend of Zelda: Four Swords Adventures**
+	    * D-Pad => Left Stick
+		* Select => D-Pad Down
+		
+To build on Windows, you might need to set the "windows" variable so the build process can find zip.exe:
+
+    $ windows=1 make
+
+You'll also want to make sure the devkitpro folder with libwinpthread-1.dll is in your PATH.
+
+.dol files (if any) are in the Releases section on GitHub.
+
 ### Nintendont
 A Wii Homebrew Project to play GC Games on Wii and vWii on Wii U
 
