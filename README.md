@@ -3,9 +3,13 @@
 Changes from upstream (https://github.com/FIX94/Nintendont) in this branch:
 
 * You can load a base64-encoded nincfg.bin from the command line (for loading specific games directly from Homebrew Channel entries; also see [NinCFGEditor](https://github.com/libertyernie/NinCFGEditor))
-* Classic Controller / Classic Controller Pro and Wii U GamePad changes:
-    * Exit is now L+Home instead of Home
-	* Swap (Y/B vs. B/A) is now L+Minus instead of Minus
+* Controller shortcuts to swap buttons (Y/B vs. B/A) or exit Nintendont have been removed
+* There are new default mappings for the Classic Controller, Classic Controller Pro, and Wii U GamePad:
+    * Large left shoulder button: full L press
+    * Small left shoulder button: half L press
+    * Large right shoulder button: full R press
+    * Small right shoulder button: half R press
+    * Select / Minus: Z
 * Special controller overrides for the Classic Controller, Classic Controller Pro, and Wii U GamePad:
     * **The Legend of Zelda: Four Swords Adventures**
 	    * D-Pad => Left Stick

@@ -156,18 +156,6 @@ u32 PADRead(u32 calledByGame)
 		//Start out mapping buttons first
 		u16 button = 0;
 		u16 drcbutton = (i2cdata[2]<<8) | (i2cdata[3]);
-		//swap abxy when L+minus is pressed
-		if((!((PrevDRCButton & WIIDRC_BUTTON_L) && (PrevDRCButton & WIIDRC_BUTTON_MINUS))) && ((drcbutton & WIIDRC_BUTTON_L) && (drcbutton & WIIDRC_BUTTON_MINUS)))
-			PrevDRCButton ^= DRC_SWAP;
-		PrevDRCButton = (PrevDRCButton & DRC_SWAP) | drcbutton;
-		if(PrevDRCButton & DRC_SWAP)
-		{	/* turn buttons quarter clockwise */
-			if(drcbutton & WIIDRC_BUTTON_B) button |= PAD_BUTTON_A;
-			if(drcbutton & WIIDRC_BUTTON_Y) button |= PAD_BUTTON_B;
-			if(drcbutton & WIIDRC_BUTTON_A) button |= PAD_BUTTON_X;
-			if(drcbutton & WIIDRC_BUTTON_X) button |= PAD_BUTTON_Y;
-		}
-		else
 		{
 			if(drcbutton & WIIDRC_BUTTON_A) button |= PAD_BUTTON_A;
 			if(drcbutton & WIIDRC_BUTTON_B) button |= PAD_BUTTON_B;
@@ -178,38 +166,34 @@ u32 PADRead(u32 calledByGame)
 		if(drcbutton & WIIDRC_BUTTON_RIGHT) button |= PAD_BUTTON_RIGHT;
 		if(drcbutton & WIIDRC_BUTTON_UP) button |= PAD_BUTTON_UP;
 		if(drcbutton & WIIDRC_BUTTON_DOWN) button |= PAD_BUTTON_DOWN;
-		//also sets left analog trigger
-		if(drcbutton & WIIDRC_BUTTON_ZL)
-		{
-			//Check half-press by holding L
-			if(drcbutton & WIIDRC_BUTTON_L)
-				Pad[WiiUGamepadSlot].triggerLeft = 0x7F;
-			else
-			{
-				button |= PAD_TRIGGER_L;
-				Pad[WiiUGamepadSlot].triggerLeft = 0xFF;
-			}
+
+		if (drcbutton & WIIDRC_BUTTON_ZL) {
+			button |= PAD_TRIGGER_L;
+			Pad[WiiUGamepadSlot].triggerLeft = 0xFF;
 		}
-		else
+		else if (drcbutton & WIIDRC_BUTTON_L) {
+			Pad[WiiUGamepadSlot].triggerLeft = 0x7F;
+		}
+		else {
 			Pad[WiiUGamepadSlot].triggerLeft = 0;
-		//also sets right analog trigger
-		if(drcbutton & WIIDRC_BUTTON_ZR)
-		{
-			//Check half-press by holding L
-			if(drcbutton & WIIDRC_BUTTON_L)
-				Pad[WiiUGamepadSlot].triggerRight = 0x7F;
-			else
-			{
-				button |= PAD_TRIGGER_R;
-				Pad[WiiUGamepadSlot].triggerRight = 0xFF;
-			}
 		}
-		else
+
+		if (drcbutton & WIIDRC_BUTTON_ZR) {
+			button |= PAD_TRIGGER_R;
+			Pad[WiiUGamepadSlot].triggerRight = 0xFF;
+		}
+		else if (drcbutton & WIIDRC_BUTTON_R) {
+			Pad[WiiUGamepadSlot].triggerRight = 0x7F;
+		}
+		else {
 			Pad[WiiUGamepadSlot].triggerRight = 0;
+		}
+
+		if (drcbutton & WIIDRC_BUTTON_MINUS)
+			button |= PAD_TRIGGER_Z;
+
 		if(drcbutton & WIIDRC_BUTTON_R) button |= PAD_TRIGGER_Z;
 		if(drcbutton & WIIDRC_BUTTON_PLUS) button |= PAD_BUTTON_START;
-		//L+HOME to exit
-		if((drcbutton & WIIDRC_BUTTON_L) && (drcbutton & WIIDRC_BUTTON_HOME)) goto DoExit;
 
 		//write in mapped out buttons
 		Pad[WiiUGamepadSlot].button = button;
@@ -382,51 +366,6 @@ u32 PADRead(u32 calledByGame)
 					Pad[chan].triggerRight = 0;
 			}
 
-			/* exit by pressing B,Z,R,PAD_BUTTON_DOWN */
-			if((Pad[chan].button&0x234) == 0x234)
-			{
-				goto DoExit;
-			}
-			if((Pad[chan].button&0x1c00) == 0x1c00 || ((*PadUsed & (1 << chan)) == 0))
-			{
-				OffsetX[chan] = Pad[chan].stickX;
-				OffsetY[chan] = Pad[chan].stickY;
-				OffsetCX[chan] = Pad[chan].substickX;
-				OffsetCY[chan] = Pad[chan].substickY;
-			}
-
-			tempStick = (s8)Pad[chan].stickX;
-			tempStick -= OffsetX[chan];
-			if (tempStick > 0x7F)
-				tempStick = 0x7F;
-			else if (tempStick < -0x80)
-				tempStick = -0x80;
-			Pad[chan].stickX = (s8)tempStick;
-
-			tempStick = (s8)Pad[chan].stickY;
-			tempStick -= OffsetY[chan];
-			if (tempStick > 0x7F)
-				tempStick = 0x7F;
-			else if (tempStick < -0x80)
-				tempStick = -0x80;
-			Pad[chan].stickY = (s8)tempStick;
-
-			tempStick = (s8)Pad[chan].substickX;
-			tempStick -= OffsetCX[chan];
-			if (tempStick > 0x7F)
-				tempStick = 0x7F;
-			else if (tempStick < -0x80)
-				tempStick = -0x80;
-			Pad[chan].substickX = (s8)tempStick;
-
-			tempStick = (s8)Pad[chan].substickY;
-			tempStick -= OffsetCY[chan];
-			if (tempStick > 0x7F)
-				tempStick = 0x7F;
-			else if (tempStick < -0x80)
-				tempStick = -0x80;
-			Pad[chan].substickY = (s8)tempStick;
-
 			if((Pad[chan].button&0x1030) == 0x1030)	//reset by pressing start, Z, R
 			{
 				/* reset status 3 */
@@ -512,11 +451,6 @@ u32 PADRead(u32 calledByGame)
 			}
 		}
 
-		if(calledByGame && HID_CTRL->Power.Mask &&	//exit if power configured and all power buttons pressed
-		((HID_Packet[HID_CTRL->Power.Offset] & HID_CTRL->Power.Mask) == HID_CTRL->Power.Mask))
-		{
-			goto DoExit;
-		}
 		used |= (1<<chan);
 
 		Rumble |= ((1<<31)>>chan);
@@ -882,48 +816,35 @@ u32 PADRead(u32 calledByGame)
 
 		u16 button = 0;
 
-		if(BTPad[chan].used & C_CC)
-		{
-			Pad[chan].triggerLeft = BTPad[chan].triggerL;
-			if(BTPad[chan].button & BT_TRIGGER_L)
+		if (BTPad[chan].used & (C_CC | C_CCP)) {
+			u16 LARGE_L = (BTPad[chan].used & C_CCP) ? BT_TRIGGER_ZL : BT_TRIGGER_L;
+			u16 SMALL_L = (BTPad[chan].used & C_CCP) ? BT_TRIGGER_L : BT_TRIGGER_ZL;
+			u16 LARGE_R = (BTPad[chan].used & C_CCP) ? BT_TRIGGER_ZR : BT_TRIGGER_R;
+			u16 SMALL_R = (BTPad[chan].used & C_CCP) ? BT_TRIGGER_R : BT_TRIGGER_ZR;
+
+			if (BTPad[chan].button & LARGE_L) {
 				button |= PAD_TRIGGER_L;
-
-			Pad[chan].triggerRight = BTPad[chan].triggerR;
-			if(BTPad[chan].button & BT_TRIGGER_R)
-				button |= PAD_TRIGGER_R;
-
-			if(BTPad[chan].button & BT_TRIGGER_ZR)
-				button |= PAD_TRIGGER_Z;
-		}
-		else if(BTPad[chan].used & C_CCP)	//digital triggers
-		{
-			if(BTPad[chan].button & BT_TRIGGER_ZL)
-			{
-				if(BTPad[chan].button & BT_TRIGGER_L)
-					Pad[chan].triggerLeft = 0x7F;
-				else
-				{
-					button |= PAD_TRIGGER_L;
-					Pad[chan].triggerLeft = 0xFF;
-				}
+				Pad[chan].triggerLeft = 0xFF;
 			}
-			else
+			else if (BTPad[chan].button & SMALL_L) {
+				Pad[chan].triggerLeft = 0x7F;
+			}
+			else {
 				Pad[chan].triggerLeft = 0;
-
-			if(BTPad[chan].button & BT_TRIGGER_ZR)
-			{
-				if(BTPad[chan].button & BT_TRIGGER_L)
-					Pad[chan].triggerRight = 0x7F;
-				else
-				{
-					button |= PAD_TRIGGER_R;
-					Pad[chan].triggerRight = 0xFF;
-				}
 			}
-			else
-				Pad[chan].triggerRight = 0;
 
-			if(BTPad[chan].button & BT_TRIGGER_R)
+			if (BTPad[chan].button & LARGE_R) {
+				button |= PAD_TRIGGER_R;
+				Pad[chan].triggerRight = 0xFF;
+			}
+			else if (BTPad[chan].button & SMALL_R) {
+				Pad[chan].triggerRight = 0x7F;
+			}
+			else {
+				Pad[chan].triggerRight = 0;
+			}
+
+			if (BTPad[chan].button & BT_BUTTON_SELECT)
 				button |= PAD_TRIGGER_Z;
 		}
 
@@ -1458,18 +1379,6 @@ u32 PADRead(u32 calledByGame)
 
 		if(BTPad[chan].used & (C_CC | C_CCP))
 		{
-			if(BTPad[chan].used & C_SWAP)
-			{	/* turn buttons quarter clockwise */
-				if(BTPad[chan].button & BT_BUTTON_B)
-					button |= PAD_BUTTON_A;
-				if(BTPad[chan].button & BT_BUTTON_Y)
-					button |= PAD_BUTTON_B;
-				if(BTPad[chan].button & BT_BUTTON_A)
-					button |= PAD_BUTTON_X;
-				if(BTPad[chan].button & BT_BUTTON_X)
-					button |= PAD_BUTTON_Y;
-			}
-			else
 			{
 				if(BTPad[chan].button & BT_BUTTON_A)
 					button |= PAD_BUTTON_A;
@@ -1480,9 +1389,12 @@ u32 PADRead(u32 calledByGame)
 				if(BTPad[chan].button & BT_BUTTON_Y)
 					button |= PAD_BUTTON_Y;
 			}
+
 			if(BTPad[chan].button & BT_BUTTON_START)
 				button |= PAD_BUTTON_START;
-
+			if(BTPad[chan].button & BT_BUTTON_HOME)
+				button |= PAD_BUTTON_START;
+			
 			if(BTPad[chan].button & BT_DPAD_LEFT)
 				button |= PAD_BUTTON_LEFT;
 			if(BTPad[chan].button & BT_DPAD_RIGHT)
@@ -1491,10 +1403,6 @@ u32 PADRead(u32 calledByGame)
 				button |= PAD_BUTTON_DOWN;
 			if(BTPad[chan].button & BT_DPAD_UP)
 				button |= PAD_BUTTON_UP;
-
-			//L+HOME to exit
-			if((BTPad[chan].button & BT_TRIGGER_L) && (BTPad[chan].button & BT_BUTTON_HOME))
-				goto DoExit;
 
 			if (*TitleID == 0x473453) {
 				// The Legend of Zelda: Four Swords Adventures
