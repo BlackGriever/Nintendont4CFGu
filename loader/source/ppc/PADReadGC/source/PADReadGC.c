@@ -195,35 +195,35 @@ u32 PADRead(u32 calledByGame)
 
 			if (drcbutton & (WIIDRC_BUTTON_UP | WIIDRC_BUTTON_DOWN | WIIDRC_BUTTON_LEFT | WIIDRC_BUTTON_RIGHT)) {
 				// D-pad pressed - override joystick
-				Pad[WiiUGamepadSlot].stickX = 0;
-				Pad[WiiUGamepadSlot].stickY = 0;
+				Pad[0].stickX = 0;
+				Pad[0].stickY = 0;
 				if (drcbutton & WIIDRC_BUTTON_UP) {
-					Pad[WiiUGamepadSlot].stickY += 0x7F;
+					Pad[0].stickY += 0x7F;
 				}
 				if (drcbutton & WIIDRC_BUTTON_DOWN) {
-					Pad[WiiUGamepadSlot].stickY -= 0x7F;
+					Pad[0].stickY -= 0x7F;
 				}
 				if (drcbutton & WIIDRC_BUTTON_LEFT) {
-					Pad[WiiUGamepadSlot].stickX -= 0x7F;
+					Pad[0].stickX -= 0x7F;
 				}
 				if (drcbutton & WIIDRC_BUTTON_RIGHT) {
-					Pad[WiiUGamepadSlot].stickX += 0x7F;
+					Pad[0].stickX += 0x7F;
 				}
 			}
 
 			// Hide D-pad from game (will be used to emulate joystick)
-			Pad[WiiUGamepadSlot].button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN | PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT);
+			Pad[0].button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN | PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT);
 
 			// Map Select to D-pad down
 			if (drcbutton & WIIDRC_BUTTON_MINUS)
-				Pad[WiiUGamepadSlot].button |= PAD_BUTTON_DOWN;
+				Pad[0].button |= PAD_BUTTON_DOWN;
 		}
 		else if (*TitleID == 0x47564D || *TitleID == 0x473353)
 		{
 			// Bust-a-Move 3000
-			if (Pad[WiiUGamepadSlot].button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT))
+			if (Pad[0].button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT))
 			{
-				Pad[WiiUGamepadSlot].button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN);
+				Pad[0].button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN);
 			}
 
 			if ((drcbutton & WIIDRC_BUTTON_L) || (drcbutton & WIIDRC_BUTTON_ZL)) {
@@ -236,8 +236,8 @@ u32 PADRead(u32 calledByGame)
 				Pad[0].triggerRight = 0xFF;
 			}
 
-			s8 x = Pad[WiiUGamepadSlot].stickX;
-			s8 y = Pad[WiiUGamepadSlot].stickY;
+			s8 x = Pad[0].stickX;
+			s8 y = Pad[0].stickY;
 			s8 quadrant = x > 0 && y > 0 ? 1
 				: x < 0 && y > 0 ? 2
 				: x < 0 ? 3
@@ -249,20 +249,20 @@ u32 PADRead(u32 calledByGame)
 
 			if (dir == 'N') {
 				// Up
-				Pad[WiiUGamepadSlot].stickX = 0;
+				Pad[0].stickX = 0;
 			}
 			else if (dir == 'S') {
 				// Down
-				Pad[WiiUGamepadSlot].stickX = 0;
+				Pad[0].stickX = 0;
 			}
 			else if (dir == 'W') {
 				// Right
-				Pad[WiiUGamepadSlot].stickY = 0;
+				Pad[0].stickY = 0;
 			}
 			else
 			{
 				// Left
-				Pad[WiiUGamepadSlot].stickY = 0;
+				Pad[0].stickY = 0;
 			}
 		}
 	}
@@ -1436,12 +1436,12 @@ u32 PADRead(u32 calledByGame)
 
 				if ((BTPad[chan].button & BT_TRIGGER_L) || (BTPad[chan].button & BT_TRIGGER_ZL)) {
 					button |= PAD_TRIGGER_L;
-					Pad[0].triggerLeft = 0xFF;
+					Pad[chan].triggerLeft = 0xFF;
 				}
 
 				if ((BTPad[chan].button & BT_TRIGGER_R) || (BTPad[chan].button & BT_TRIGGER_ZR)) {
 					button |= PAD_TRIGGER_R;
-					Pad[0].triggerRight = 0xFF;
+					Pad[chan].triggerRight = 0xFF;
 				}
 
 				s8 x = Pad[chan].stickX;
