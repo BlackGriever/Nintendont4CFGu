@@ -79,6 +79,23 @@ const s8 DEADZONE = 0x1A;
 	else if(tmp_stick16 < -0x80) tmp_stick8 = -0x80; \
 	else tmp_stick8 = (s8)tmp_stick16;
 
+void ApplyCardinalMask(PADStatus* pad) {
+	s8 x = pad->stickX;
+	if (x < 0) x = -x;
+	s8 y = pad->stickY;
+	if (y < 0) y = -y;
+
+	if (y > x) {
+		// Up / Down
+		pad->stickX = 0;
+	}
+	else
+	{
+		// Left / Right
+		pad->stickY = 0;
+	}
+}
+
 u32 PADRead(u32 calledByGame)
 {
 	// Registers r1,r13-r31 automatically restored if used.
@@ -213,6 +230,57 @@ u32 PADRead(u32 calledByGame)
 		Pad[WiiUGamepadSlot].substickX = tmp_stick8;
 		_DRC_BUILD_TMPSTICK(i2cdata[7]);
 		Pad[WiiUGamepadSlot].substickY = tmp_stick8;
+
+		int gpslot = WiiUGamepadSlot;
+
+		if (*TitleID == 0x473453) {
+			// The Legend of Zelda: Four Swords Adventures
+
+			if (drcbutton & (WIIDRC_BUTTON_UP | WIIDRC_BUTTON_DOWN | WIIDRC_BUTTON_LEFT | WIIDRC_BUTTON_RIGHT)) {
+				// D-pad pressed - override joystick
+				Pad[gpslot].stickX = 0;
+				Pad[gpslot].stickY = 0;
+				if (drcbutton & WIIDRC_BUTTON_UP) {
+					Pad[gpslot].stickY += 0x7F;
+				}
+				if (drcbutton & WIIDRC_BUTTON_DOWN) {
+					Pad[gpslot].stickY -= 0x7F;
+				}
+				if (drcbutton & WIIDRC_BUTTON_LEFT) {
+					Pad[gpslot].stickX -= 0x7F;
+				}
+				if (drcbutton & WIIDRC_BUTTON_RIGHT) {
+					Pad[gpslot].stickX += 0x7F;
+				}
+			}
+
+			// Hide D-pad from game (will be used to emulate joystick)
+			Pad[gpslot].button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN | PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT);
+
+			// Map Select to D-pad down
+			if (drcbutton & WIIDRC_BUTTON_MINUS)
+				Pad[gpslot].button |= PAD_BUTTON_DOWN;
+		}
+		else if (*TitleID == 0x47564D || *TitleID == 0x473353)
+		{
+			// Bust-a-Move 3000
+			if (Pad[gpslot].button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT))
+			{
+				Pad[gpslot].button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN);
+			}
+
+			if ((drcbutton & WIIDRC_BUTTON_L) || (drcbutton & WIIDRC_BUTTON_ZL)) {
+				button |= PAD_TRIGGER_L;
+				Pad[gpslot].triggerLeft = 0xFF;
+			}
+
+			if ((drcbutton & WIIDRC_BUTTON_R) || (drcbutton & WIIDRC_BUTTON_ZR)) {
+				button |= PAD_TRIGGER_R;
+				Pad[gpslot].triggerRight = 0xFF;
+			}
+
+			ApplyCardinalMask(&Pad[gpslot]);
+		}
 	}
 	else
 	{
@@ -1474,34 +1542,7 @@ u32 PADRead(u32 calledByGame)
 					Pad[chan].triggerRight = 0xFF;
 				}
 
-				s8 x = Pad[chan].stickX;
-				s8 y = Pad[chan].stickY;
-				s8 quadrant = x > 0 && y > 0 ? 1
-					: x < 0 && y > 0 ? 2
-					: x < 0 ? 3
-					: 4;
-				char dir = quadrant == 1 ? (x >= y ? 'E' : 'N')
-					: quadrant == 2 ? (-x >= y ? 'W' : 'N')
-					: quadrant == 3 ? (-x >= -y ? 'W' : 'S')
-					: (x >= -y ? 'E' : 'S');
-
-				if (dir == 'N') {
-					// Up
-					Pad[chan].stickX = 0;
-				}
-				else if (dir == 'S') {
-					// Down
-					Pad[chan].stickX = 0;
-				}
-				else if (dir == 'W') {
-					// Right
-					Pad[chan].stickY = 0;
-				}
-				else
-				{
-					// Left
-					Pad[chan].stickY = 0;
-				}
+				ApplyCardinalMask(&Pad[chan]);
 			}
 		}
 
