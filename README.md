@@ -31,44 +31,44 @@ You'll also want to make sure the devkitpro folder with libwinpthread-1.dll is i
 ### Nintendont
 A Wii Homebrew Project to play GC Games on Wii and vWii on Wii U
 
-### Features:
-* Works on Wii and Wii U (in vWii mode)
-* Full-speed loading from a USB device or an SD card.
-* Loads 1:1 and shrunken .GCM/.ISO disc images.
-* Loads games as extracted files (FST format)
-* Loads CISO-format disc images. (uLoader CISO format)
-* Memory card emulation
-* Play audio via disc audio streaming
-* Bluetooth controller support (Classic Controller (Pro), Wii U Pro Controller)
-* HID controller support via USB
-* Custom button layout when using HID controllers
-* Cheat code support
-* Changeable configuration of various settings
-* Reset/Power off via button combo (R + Z + Start) (R + Z + B + D-Pad Down)
-* Advanced video mode patching, force progressive and force 16:9 widescreen
-* Auto boot from loader
-* Disc switching
-* Use the official Nintendo GameCube controller adapter
-* BBA Emulation (see [BBA Emulation Readme](BBA_Readme.md))
+### HOWTO ###
+* Connect your XBOX360 controller then start Nintendont-XBOX360. (Order is optional.)
+* The XBOX360 LED 1 should now light up and the gamepad should react.<br>
+  If you start a game the WiiMote LED says player 2.
+* If your controller doesn't work try one of these options:
+    1. Restart Nintendont-XBOX360 or your Wii.
+    2. Replug your controller.
+    3. Plug in your controller after you have started a game. 
+    4. If it is still not working, try my USB gamepad tester [RetrodeTest](https://github.com/revvv/snes9xgx-retrode/releases/download/0.5/RetrodeTest-0.2.zip)
+    to check if your Gamepad works at all.
+    5. Set `EndpointOut=0` in`/controller/045e_028e.ini`. This will disable rumble and LED will flash.<br>
+    Also use this settings if your Wii crashes. (Rare crashes are normal, though.)
+  
+### Turn on LED and rumble ###
+* If the LED keeps flashing, this means that the LED cannot be set and also rumble will not work.
+  Try to set `EndpointOut=2` in [/controller/045e_028e.ini](https://github.com/revvv/Nintendont-XBOX360/blob/master/controllerconfigs/045e_028e.ini).<br>
+  The default is `EndpointOut=1` which is surprisingly correct for my controller ;-)<br>
+  There are controllers which are not compatible with these settings. You could try the values 1-8.<br>
+  Maybe check `lsusb -v -d 045e:028e` and grep for `OUT`. [Example output](https://gist.github.com/rombert/6902ab691e12ab478e31)
 
-### Features: (Wii only)
-* Play retail discs
-* Play backups from writable DVD media (Old Wii only)
-* Use real memory cards
-* GBA-Link cable
-* WiiRd
-* Allow use of the Nintendo GameCube Microphone
+### Debugging ###
+* Enable _Debugger_ and _Log_ in Nintendont-XBOX360 settings.
+* Check log file `/ndebug.log`.
+* The log file is not always written: Best practice is to start a game, then plug in your controller, then quit.
 
-### What Nintendont will never support:
-* Game Boy Player
+#### Download ###
+* [Release](https://github.com/revvv/Nintendont-XBOX360/releases/)
+* Unpack it to your SD card.
+* Put games in folder `/games`
+* *Optional:* Configure button layout in [/controller/045e_028e.ini](https://github.com/revvv/Nintendont-XBOX360/blob/master/controllerconfigs/045e_028e.ini).<br>
+  __NEW:__ Fixed XBOX360 rumble for vWii<br>
+  __NEW:__ Support 3rd party WiiMote + Nunchuk (labeled with "NEW2in1" and "Motion plus", distributed by Haiwai Consulting/Tiger-Zhou UG)
+  
+### Compile
+Get these versions: devkitppc r29-1, devkitarm r47 and libogc 1.8.16 and execute _make_. 
 
-### Quick Installation:
-1. Get the [loader.dol](loader/loader.dol?raw=true), rename it to boot.dol and put it in /apps/Nintendont/ along with the files [meta.xml](nintendont/meta.xml?raw=true) and [icon.png](nintendont/icon.png?raw=true).
-2. Copy your GameCube games to the /games/ directory. Subdirectories are optional for 1-disc games in ISO/GCM and CISO format.
-   * For 2-disc games, you should create a subdirectory /games/MYGAME/ (where MYGAME can be anything), then name disc 1 as "game.iso" and disc 2 as "disc2.iso".
-   * For extracted FST, the FST must be located in a subdirectory, e.g. /games/FSTgame/sys/boot.bin .
-3. Connect your storage device to your Wii or Wii U and start The Homebrew Channel.
-4. Select Nintendont.
+### Disclaimer
+This software comes without any warranty. I am not responsible for any damage to your devices. Please make backups!
 
 ### Compiling:
 For compile Nintendont yourself, get the following versions of the toolchain compiling PPC tools:
