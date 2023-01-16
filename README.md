@@ -1,17 +1,10 @@
 # libertyernie's custom build
 
-Changes from upstream (https://github.com/revvv/Nintendont-XBOX360):
+Changes from upstream (https://github.com/revvv/Nintendont-XBOX360) in this branch:
 
-* Ability to use base64-encoded nincfg.bin contents as command line argument
-* Classic Controller and Classic Controller Pro mappings changed:
-    * Large left shoulder button -> full L press
-    * Small left shoulder button -> half L press
-    * Large right shoulder button -> full R press
-    * Small right shoulder button -> half R press
-    * Home -> Start
-    * Select (Minus) -> Z
+* You can load a base64-encoded nincfg.bin from the command line (for loading specific games directly from Homebrew Channel entries; also see [NinCFGEditor](https://github.com/libertyernie/NinCFGEditor))
 * Controller shortcuts to swap buttons (Y/B vs. B/A) or exit Nintendont have been removed
-* Special controller overrides for the Classic Controller and Classic Controller Pro in certain games:
+* Special controller overrides for the Classic Controller and Classic Controller Pro in certain games (these do not apply to other controllers):
     * The Legend of Zelda: Four Swords Adventures
         * D-Pad => Left Stick
         * Select => D-Pad Down
