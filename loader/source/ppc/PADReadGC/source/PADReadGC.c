@@ -710,48 +710,35 @@ u32 PADRead(u32 calledByGame)
 
 		u16 button = 0;
 
-		if(BTPad[chan].used & C_CC)
-		{
-			Pad[chan].triggerLeft = BTPad[chan].triggerL;
-			if(BTPad[chan].button & BT_TRIGGER_L)
+		if (BTPad[chan].used & (C_CC | C_CCP)) {
+			u16 LARGE_L = (BTPad[chan].used & C_CCP) ? BT_TRIGGER_ZL : BT_TRIGGER_L;
+			u16 SMALL_L = (BTPad[chan].used & C_CCP) ? BT_TRIGGER_L : BT_TRIGGER_ZL;
+			u16 LARGE_R = (BTPad[chan].used & C_CCP) ? BT_TRIGGER_ZR : BT_TRIGGER_R;
+			u16 SMALL_R = (BTPad[chan].used & C_CCP) ? BT_TRIGGER_R : BT_TRIGGER_ZR;
+
+			if (BTPad[chan].button & LARGE_L) {
 				button |= PAD_TRIGGER_L;
-
-			Pad[chan].triggerRight = BTPad[chan].triggerR;
-			if(BTPad[chan].button & BT_TRIGGER_R)
-				button |= PAD_TRIGGER_R;
-
-			if(BTPad[chan].button & BT_TRIGGER_ZR)
-				button |= PAD_TRIGGER_Z;
-		}
-		else if(BTPad[chan].used & C_CCP)	//digital triggers
-		{
-			if(BTPad[chan].button & BT_TRIGGER_ZL)
-			{
-				if(BTPad[chan].button & BT_TRIGGER_L)
-					Pad[chan].triggerLeft = 0x7F;
-				else
-				{
-					button |= PAD_TRIGGER_L;
-					Pad[chan].triggerLeft = 0xFF;
-				}
+				Pad[chan].triggerLeft = 0xFF;
 			}
-			else
+			else if (BTPad[chan].button & SMALL_L) {
+				Pad[chan].triggerLeft = 0x7F;
+			}
+			else {
 				Pad[chan].triggerLeft = 0;
-
-			if(BTPad[chan].button & BT_TRIGGER_ZR)
-			{
-				if(BTPad[chan].button & BT_TRIGGER_L)
-					Pad[chan].triggerRight = 0x7F;
-				else
-				{
-					button |= PAD_TRIGGER_R;
-					Pad[chan].triggerRight = 0xFF;
-				}
 			}
-			else
-				Pad[chan].triggerRight = 0;
 
-			if(BTPad[chan].button & BT_TRIGGER_R)
+			if (BTPad[chan].button & LARGE_R) {
+				button |= PAD_TRIGGER_R;
+				Pad[chan].triggerRight = 0xFF;
+			}
+			else if (BTPad[chan].button & SMALL_R) {
+				Pad[chan].triggerRight = 0x7F;
+			}
+			else {
+				Pad[chan].triggerRight = 0;
+			}
+
+			if (BTPad[chan].button & BT_BUTTON_SELECT)
 				button |= PAD_TRIGGER_Z;
 		}
 		
