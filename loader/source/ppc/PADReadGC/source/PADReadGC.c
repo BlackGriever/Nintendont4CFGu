@@ -27,6 +27,8 @@ static vu32* PADIsBarrel = (vu32*)0xD3003130;
 static vu32* PADBarrelEnabled = (vu32*)0xD3003140;
 static vu32* PADBarrelPress = (vu32*)0xD3003150;
 
+static vu32* TitleID = (vu32*)0x932C0498;
+
 static volatile struct BTPadCont *BTPad = (volatile struct BTPadCont*)0x932F0000;
 static vu32* BTMotor = (vu32*)0x93003040;
 static vu32* BTPadFree = (vu32*)0x93003050;
@@ -209,6 +211,35 @@ u32 PADRead(u32 calledByGame)
 		Pad[WiiUGamepadSlot].substickX = tmp_stick8;
 		_DRC_BUILD_TMPSTICK(i2cdata[7]);
 		Pad[WiiUGamepadSlot].substickY = tmp_stick8;
+
+		if (*TitleID == 0x473453) {
+			// The Legend of Zelda: Four Swords Adventures
+
+			if (drcbutton & (WIIDRC_BUTTON_UP | WIIDRC_BUTTON_DOWN | WIIDRC_BUTTON_LEFT | WIIDRC_BUTTON_RIGHT)) {
+				// D-pad pressed - override joystick
+				Pad[WiiUGamepadSlot].stickX = 0;
+				Pad[WiiUGamepadSlot].stickY = 0;
+				if (drcbutton & WIIDRC_BUTTON_UP) {
+					Pad[WiiUGamepadSlot].stickY += 0x7F;
+				}
+				if (drcbutton & WIIDRC_BUTTON_DOWN) {
+					Pad[WiiUGamepadSlot].stickY -= 0x7F;
+				}
+				if (drcbutton & WIIDRC_BUTTON_LEFT) {
+					Pad[WiiUGamepadSlot].stickX -= 0x7F;
+				}
+				if (drcbutton & WIIDRC_BUTTON_RIGHT) {
+					Pad[WiiUGamepadSlot].stickX += 0x7F;
+				}
+			}
+
+			// Hide D-pad from game (will be used to emulate joystick)
+			Pad[WiiUGamepadSlot].button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN | PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT);
+
+			// Map Select to D-pad down
+			if (drcbutton & WIIDRC_BUTTON_MINUS)
+				Pad[WiiUGamepadSlot].button |= PAD_BUTTON_DOWN;
+		}
 	}
 	else
 	{
@@ -1421,8 +1452,37 @@ u32 PADRead(u32 calledByGame)
 
 			if(BTPad[chan].button & BT_BUTTON_HOME)
 				goto DoExit;
-		}
 
+			if (*TitleID == 0x473453) {
+				// The Legend of Zelda: Four Swords Adventures
+
+				if (BTPad[chan].button & (BT_DPAD_UP | BT_DPAD_DOWN | BT_DPAD_LEFT | BT_DPAD_RIGHT)) {
+					// D-pad pressed - override joystick
+					Pad[chan].stickX = 0;
+					Pad[chan].stickY = 0;
+					if (BTPad[chan].button & BT_DPAD_UP) {
+						Pad[chan].stickY += 0x7F;
+					}
+					if (BTPad[chan].button & BT_DPAD_DOWN) {
+						Pad[chan].stickY -= 0x7F;
+					}
+					if (BTPad[chan].button & BT_DPAD_LEFT) {
+						Pad[chan].stickX -= 0x7F;
+					}
+					if (BTPad[chan].button & BT_DPAD_RIGHT) {
+						Pad[chan].stickX += 0x7F;
+					}
+				}
+
+				// Hide D-pad from game (will be used to emulate joystick)
+				button &= ~(PAD_BUTTON_UP | PAD_BUTTON_DOWN | PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT);
+
+				// Map Select to D-pad down
+				if (BTPad[chan].button & BT_BUTTON_SELECT)
+					button |= PAD_BUTTON_DOWN;
+			}
+		}	
+		
 		Pad[chan].button = button;
 
 //#define DEBUG_cStick	1
