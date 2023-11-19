@@ -24,11 +24,10 @@ Available preprocessor flags in this branch (define these in NintendontVersion.h
     * Nintendo Puzzle Collection
         * on Classic Controller, L and R do not activate unless one of the corresponding shoulder buttons is pressed all the way (digitally)
     * Spy Hunter
-        * Large L button -> full L press + Z
-        * Small L button -> full R press + Z
-        * Large R button -> full R press
-        * Small R button -> full L press
+        * Small L button -> full L press + Z
+        * Small R button -> full R press + Z
         * Y and X swapped
+        * Select -> X
     * Super Smash Bros. Melee
         * Large L button -> analog or full L press
         * Small L button -> 25% L press
@@ -37,8 +36,17 @@ Available preprocessor flags in this branch (define these in NintendontVersion.h
         * D-pad -> Left stick (75% tilt)
         * Select -> D-pad up
     * Super Mario Sunshine / Luigi's Mansion
-        * Large L and R buttons -> nearly-full analog presses (0xFE / 254)
-        * Small L and R buttons -> full analog and digital presses
+        * Small L and large R buttons -> nearly-full analog presses (0xFE / 254)
+        * Large L and small R buttons -> full analog and digital presses
+    * Mario Kart: Double Dash!!
+        * Large L button -> X
+        * Large R button -> full R press
+        * Small L button -> Z
+        * Small R button -> Z
+        * D-pad left -> full L press, partial left tilt
+        * D-pad right -> full R press, partial right tilt
+        * D-pad up -> full up tilt
+        * D-pad down -> full down tilt
 * `LI_BASE64`: lets you load a base64-encoded nincfg.bin from meta.xml (also see [NinCFGEditor](https://github.com/libertyernie/NinCFGEditor))
 * `LI_SHOULDER`: tweaks the button mappings on certain controllers
     * Classic Controller:

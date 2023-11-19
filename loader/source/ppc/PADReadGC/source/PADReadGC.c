@@ -229,21 +229,20 @@ void HandleClassicController(struct BTPadCont pad, PADStatus* out) {
 		button &= ~(PAD_TRIGGER_L | PAD_TRIGGER_R | PAD_BUTTON_X | PAD_BUTTON_Y | PAD_TRIGGER_Z);
 		triggerLeft = 0;
 		triggerRight = 0;
-		if (largeR || smallL) {
-			button |= PAD_TRIGGER_L;
-			triggerLeft = 0xFF;
-		}
-		if (smallR || largeL) {
+		if (smallR) {
+			button |= PAD_TRIGGER_Z;
 			button |= PAD_TRIGGER_R;
 			triggerRight = 0xFF;
 		}
-		if (largeL || smallL) {
+		if (smallL) {
 			button |= PAD_TRIGGER_Z;
+			button |= PAD_TRIGGER_L;
+			triggerLeft = 0xFF;
 		}
 		if (pad.button & BT_BUTTON_X) {
 			button |= PAD_BUTTON_Y;
 		}
-		if (pad.button & BT_BUTTON_Y) {
+		if ((pad.button & BT_BUTTON_Y) || (pad.button & BT_BUTTON_SELECT)) {
 			button |= PAD_BUTTON_X;
 		}
 	}
@@ -290,7 +289,8 @@ void HandleClassicController(struct BTPadCont pad, PADStatus* out) {
 		triggerRight = 0;
 
 		if (largeL) {
-			triggerLeft = 0xFE;
+			button |= PAD_TRIGGER_L;
+			triggerLeft = 0xFF;
 		}
 
 		if (largeR) {
@@ -298,8 +298,7 @@ void HandleClassicController(struct BTPadCont pad, PADStatus* out) {
 		}
 
 		if (smallL) {
-			button |= PAD_TRIGGER_L;
-			triggerLeft = 0xFF;
+			triggerLeft = 0xFE;
 		}
 
 		if (smallR) {
@@ -310,6 +309,9 @@ void HandleClassicController(struct BTPadCont pad, PADStatus* out) {
 	else if (*TitleID == 0x474d34)
 	{
 		// Mario Kart: Double Dash!!
+		button &= ~PAD_TRIGGER_L;
+		triggerLeft = 0;
+
 		if (largeL || (pad.button & BT_DPAD_UP) || (pad.button & BT_DPAD_DOWN)) {
 			button |= PAD_BUTTON_X;
 		}
@@ -328,13 +330,7 @@ void HandleClassicController(struct BTPadCont pad, PADStatus* out) {
 			button |= PAD_TRIGGER_Z;
 		}
 
-		if (pad.button & BT_DPAD_UP) {
-			out->stickY = 0x7F;
-		}
-
-		if (pad.button & BT_DPAD_DOWN) {
-			out->stickY = -0x7F;
-		}
+		BTDPadToStick(out, pad.button, 0x7F);
 	}
 #endif
 #ifndef LI_NOEXIT
