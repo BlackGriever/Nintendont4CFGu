@@ -25,12 +25,23 @@ Available preprocessor flags in this branch (define these in NintendontVersion.h
         * R -> half R press (0x7F)
         * Home -> Start (if `LI_NOEXIT` is used)
         * Select -> Z
-* `LI_SHOULDER_DIRECT`: tweaks the button mappings on certain controllers
+* `LI_SHOULDER_BYNAME`: tweaks the button mappings on certain controllers
     * Classic Controller / Classic Controller Pro:
         * L -> L (analog passthrough)
         * R -> R (analog passthrough)
         * ZL -> Y
         * ZR -> Z
+* `LI_SHOULDER_BYPOSITION`: tweaks the button mappings on certain controllers
+    * Classic Controller / Classic Controller Pro:
+        * L -> L (analog passthrough)
+        * R -> R (analog passthrough)
+        * ZL -> Y
+        * ZR -> Z
+    * Classic Controller Pro:
+        * L -> Y
+        * R -> Z
+        * ZL -> L
+        * ZR -> R
 * `LI_ANALOG_SHOULDER_FULL`: simulates a full analog L/R press on the Classic Controller whenever a digital (full) press is detected
 
 To build on Windows, you might need to set the "windows" variable so the build process can find zip.exe:
@@ -49,7 +60,7 @@ Classic Controller and Classic Controller Pro button mappings:
 * The Legend of Zelda: Four Swords Adventures
     * D-pad unmapped
     * D-pad -> left analog stick, full tilt
-    * If `LI_SHOULDER_DIRECT` is enabled:
+    * If `LI_SHOULDER_BYNAME` or `LI_SHOULDER_BYSIZE` is enabled (gray and black builds):
         * Select -> X
 * Mario Party 4
     * D-pad unmapped

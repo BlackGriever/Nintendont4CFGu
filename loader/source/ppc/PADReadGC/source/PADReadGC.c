@@ -209,7 +209,10 @@ void HandleClassicController(struct BTPadCont pad, PADStatus* out) {
 		reset_gamecube_dpad();
 		BTDPadToStick(out, pad.button, 0x7F);
 
-#ifdef LI_SHOULDER_DIRECT
+#ifdef LI_SHOULDER_BYNAME
+		map_classic_controller_to_gamecube(BT_BUTTON_SELECT, PAD_BUTTON_X);
+#endif
+#ifdef LI_SHOULDER_BYPOSITION
 		map_classic_controller_to_gamecube(BT_BUTTON_SELECT, PAD_BUTTON_X);
 #endif
 	}
@@ -1290,7 +1293,7 @@ u32 PADRead(u32 calledByGame)
 			if (BTPad[chan].button & BT_BUTTON_SELECT)
 				button |= PAD_TRIGGER_Z;
 		}
-#elif defined LI_SHOULDER_DIRECT
+#elif defined LI_SHOULDER_BYNAME
 		if (BTPad[chan].used & C_CCP) {
 			Pad[chan].triggerLeft = 0;
 			Pad[chan].triggerRight = 0;
@@ -1316,6 +1319,51 @@ u32 PADRead(u32 calledByGame)
 
 		if (BTPad[chan].button & BT_TRIGGER_ZR) {
 			button |= PAD_TRIGGER_Z;
+		}
+#elif defined LI_SHOULDER_BYPOSITION
+		if (BTPad[chan].used & C_CCP) {
+			Pad[chan].triggerLeft = 0;
+			Pad[chan].triggerRight = 0;
+
+			if (BTPad[chan].button & BT_TRIGGER_ZL) {
+				button |= PAD_TRIGGER_L;
+				Pad[chan].triggerLeft = 0xFF;
+			}
+
+			if (BTPad[chan].button & BT_TRIGGER_ZR) {
+				button |= PAD_TRIGGER_R;
+				Pad[chan].triggerRight = 0xFF;
+			}
+
+			if (BTPad[chan].button & BT_TRIGGER_L) {
+				button |= PAD_BUTTON_Y;
+			}
+
+			if (BTPad[chan].button & BT_TRIGGER_R) {
+				button |= PAD_TRIGGER_Z;
+			}
+		}
+		else {
+			Pad[chan].triggerLeft = BTPad[chan].triggerL;
+			Pad[chan].triggerRight = BTPad[chan].triggerR;
+
+			if (BTPad[chan].button & BT_TRIGGER_L) {
+				button |= PAD_TRIGGER_L;
+				Pad[chan].triggerLeft = 0xFF;
+			}
+
+			if (BTPad[chan].button & BT_TRIGGER_R) {
+				button |= PAD_TRIGGER_R;
+				Pad[chan].triggerRight = 0xFF;
+			}
+
+			if (BTPad[chan].button & BT_TRIGGER_ZL) {
+				button |= PAD_BUTTON_Y;
+			}
+
+			if (BTPad[chan].button & BT_TRIGGER_ZR) {
+				button |= PAD_TRIGGER_Z;
+			}
 		}
 #else
 		if(BTPad[chan].used & C_CC)

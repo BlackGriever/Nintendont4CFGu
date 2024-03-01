@@ -26,7 +26,10 @@
 #define LI_SHOULDER
 #elif defined LI_VARIANT_GRAY
 #define NIN_SPECIAL_VERSION			"-li-gray"
-#define LI_SHOULDER_DIRECT
+#define LI_SHOULDER_BYNAME
+#elif defined LI_VARIANT_BLACK
+#define NIN_SPECIAL_VERSION			"-li-black"
+#define LI_SHOULDER_BYPOSITION
 #endif
 
 #define LI_ANALOG_SHOULDER_FULL
@@ -36,11 +39,5 @@
 #define LI_NORESET
 #define LI_CUSTOM_CONTROLS
 #define LI_BASE64
-
-#ifdef LI_SHOULDER
-#ifdef LI_SHOULDER_DIRECT
-#error LI_SHOULDER and LI_SHOULDER_DIRECT cannot be used together
-#endif
-#endif
 
 #endif
