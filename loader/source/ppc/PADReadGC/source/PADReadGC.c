@@ -491,7 +491,7 @@ u32 PADRead(u32 calledByGame)
 
 		if (drcbutton & WIIDRC_BUTTON_MINUS)
 			button |= PAD_TRIGGER_Z;
-#elif defined LI_SHOULDER_DIRECT
+#elif defined LI_SHOULDER_BYNAME
 		if (drcbutton & WIIDRC_BUTTON_L) {
 			button |= PAD_TRIGGER_L;
 			Pad[WiiUGamepadSlot].triggerLeft = 0xFF;
@@ -512,6 +512,28 @@ u32 PADRead(u32 calledByGame)
 			button |= PAD_BUTTON_Y;
 
 		if (drcbutton & WIIDRC_BUTTON_ZR)
+			button |= PAD_TRIGGER_Z;
+#elif defined LI_SHOULDER_BYPOSITION
+		if (drcbutton & WIIDRC_BUTTON_ZL) {
+			button |= PAD_TRIGGER_L;
+			Pad[WiiUGamepadSlot].triggerLeft = 0xFF;
+		}
+		else {
+			Pad[WiiUGamepadSlot].triggerLeft = 0;
+		}
+
+		if (drcbutton & WIIDRC_BUTTON_ZR) {
+			button |= PAD_TRIGGER_R;
+			Pad[WiiUGamepadSlot].triggerRight = 0xFF;
+		}
+		else {
+			Pad[WiiUGamepadSlot].triggerRight = 0;
+		}
+
+		if (drcbutton & WIIDRC_BUTTON_L)
+			button |= PAD_BUTTON_Y;
+
+		if (drcbutton & WIIDRC_BUTTON_R)
 			button |= PAD_TRIGGER_Z;
 #else
 		//also sets left analog trigger
