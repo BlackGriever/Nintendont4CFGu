@@ -380,10 +380,7 @@ void HandleClassicController(struct BTPadCont pad, PADStatus* out) {
 	}
 #endif
 #endif
-#ifndef LI_NOEXIT
-	if (pad.button & BT_BUTTON_HOME)
-		goto DoExit;
-#elif defined LI_SHOULDER
+#ifdef LI_SHOULDER
 	if (pad.button & BT_BUTTON_HOME)
 		button |= PAD_BUTTON_START;
 #endif
@@ -1948,6 +1945,12 @@ u32 PADRead(u32 calledByGame)
 		if(BTPad[chan].used & (C_CC | C_CCP))
 		{
 			HandleClassicController(BTPad[chan], &Pad[chan]);
+
+#ifndef LI_NOEXIT
+			if (BTPad[chan].button & BT_BUTTON_HOME) {
+				goto DoExit;
+			}
+#endif
 		}
 
 //#define DEBUG_cStick	1
