@@ -33,7 +33,6 @@
 #endif
 
 #define LI_ANALOG_SHOULDER_FULL
-#define LI_GAMEPADASCCPRO
 #define LI_NOSWAP
 #define LI_NOEXIT
 #define LI_NORESET
