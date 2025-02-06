@@ -823,9 +823,11 @@ int main(int argc, char **argv)
 
 			ncfg->Magicbytes = 0x01070CF6;
 			ncfg->Version = NIN_CFG_VERSION;
-			ncfg->Language = NIN_LAN_AUTO;
+                        ncfg->Config = 0x000AA288;
+			ncfg->Language = NIN_LAN_ITALIAN;
+                        ncfg->VideoMode = 0x00020014;
 			ncfg->MaxPads = NIN_CFG_MAXPAD;
-			ncfg->MemCardBlocks = 0x2;//251 blocks
+			ncfg->MemCardBlocks = 0x3;//507 blocks
 		}
 
 		// Prevent autobooting if B is pressed
@@ -1187,8 +1189,6 @@ int main(int argc, char **argv)
 					break;
 
 				case BI2_REGION_PAL:
-					// FIXME: PAL IPL is broken on Wii U.
-					if (!IsWiiU())
 						snprintf(iplchar, sizeof(iplchar), "%s:/iplpal.bin", GetRootDevice());
 					break;
 			}
