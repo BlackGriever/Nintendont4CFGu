@@ -16,7 +16,7 @@
 #define NIN_SPECIAL_VERSION			"-li-green"
 #define LI_XBOX360
 #define LI_NONUNCHUK
-#define LI_SHOULDER
+#define LI_SHOULDER_BYNAME
 #elif defined LI_VARIANT_NAVY
 #define NIN_SPECIAL_VERSION			"-li-navy"
 #define LI_SHOULDER
@@ -34,9 +34,6 @@
 
 #define LI_ANALOG_SHOULDER_FULL
 #define LI_NOSWAP
-#define LI_NOEXIT
 #define LI_NORESET
-#define LI_CUSTOM_CONTROLS
-#define LI_BASE64
 
 #endif
