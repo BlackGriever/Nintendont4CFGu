@@ -509,7 +509,7 @@ u32 PADRead(u32 calledByGame)
 		}
 
 		if (drcbutton & WIIDRC_BUTTON_ZL)
-			button |= PAD_BUTTON_Y;
+			button |= PAD_BUTTON_Z;
 
 		if (drcbutton & WIIDRC_BUTTON_ZR)
 			button |= PAD_TRIGGER_Z;
@@ -1321,7 +1321,7 @@ u32 PADRead(u32 calledByGame)
 		}
 
 		if (BTPad[chan].button & BT_TRIGGER_ZL) {
-			button |= PAD_BUTTON_Y;
+			button |= PAD_BUTTON_Z;
 		}
 
 		if (BTPad[chan].button & BT_TRIGGER_ZR) {
